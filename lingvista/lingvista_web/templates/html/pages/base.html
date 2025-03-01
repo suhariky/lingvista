@@ -1,41 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lingvista</title>
-    <style>
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            font-size: 16px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <a href="/" class="logo">Lingvista</a>
-        {% if user.is_authenticated %}
-            <a href="/langlevel_page/" class="btn">Задания</a>
-            <a href="/account_page/" class="btn">Профиль</a>
-        {% else %}
-            <a href="/login_page/" class="btn">Войти</a>
-            <a href="/registry_page/" class="btn">Регистрация</a>
-        {% endif %}
+    <header role="header">
+        {% include 'html/elements/navbar.html' %}
     </header>
-    <main>
+
+    <main role="main">
         {% block content %}{% endblock %}
     </main>
+
+    <footer role="footer">
+        <!-- футер -->
+    </footer>
 </body>
 </html>
