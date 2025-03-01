@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.urls import path
-from lingvista_web.views import index, login_view, register_view, tasks_view, profile_view, leaderboard_view, dictionary_view
+from lingvista_web import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
-    path('login/', login_view, name='login'),
-    path('register/', register_view, name='register'),
-    path('tasks/', tasks_view, name='tasks'),
-    path('profile/', profile_view, name='profile'),
-    path('leaderboard/', leaderboard_view, name='leaderboard'),
-    path('dictionary/', dictionary_view, name='dictionary'),
+    path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+    path('tasks/', views.tasks_view, name='tasks'),
+    path('profile/', views.profile_view, name='profile'),
+    path('leaderboard/', views.leaderboard_view, name='leaderboard'),
+    path('dictionary/', views.dictionary_view, name='dictionary'),
 ]
