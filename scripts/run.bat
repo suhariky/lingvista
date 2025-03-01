@@ -8,4 +8,4 @@ set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%.."
 
 :: Run server
-lingvista\manage.py runserver
+python lingvista\manage.py runserver

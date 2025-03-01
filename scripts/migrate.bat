@@ -8,5 +8,5 @@ set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%.."
 
 :: Run migration
-lingvista\manage.py makemigrations
-lingvista\manage.py migrate
+python lingvista\manage.py makemigrations
+python lingvista\manage.py migrate
