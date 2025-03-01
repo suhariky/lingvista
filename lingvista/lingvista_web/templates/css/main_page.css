@@ -1,0 +1,35 @@
+h1 {
+    font-size: 130px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    margin: 0;
+    font-size: 40px;
+}
+
+.installation-links-content > h3 {
+    margin-bottom: 10px;
+}
+
+.installation-links > a {
+    margin-right: 6px;
+}
+
+.slogan{
+    margin-bottom: 75px;
+}
+
+.main-screen {
+    height: 100%;
+    display: flex; /* Используем Flexbox для выравнивания */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center;
+    color: #375356;
+    background-color: #F6F6F6;
+}
+
+.main-screen-content {
+    width: 100%;
+    text-align: center;
+}
