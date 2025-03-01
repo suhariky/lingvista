@@ -22,8 +22,8 @@ h3 {
 
 .main-screen {
     height: 100%;
-    display: flex; /* Используем Flexbox для выравнивания */
-    justify-content: center; /* Центрируем по горизонтали */
+    display: flex;
+    justify-content: center;
     align-items: center;
     color: #375356;
     background-color: #F6F6F6;
