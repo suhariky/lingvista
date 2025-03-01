@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+def main_page(request):
+    return render(request, 'html/pages/main_page.html')
+
 def index(request):
     return render(request, 'html/pages/index.html')
 
