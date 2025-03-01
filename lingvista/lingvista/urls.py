@@ -11,4 +11,11 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('leaderboard/', views.leaderboard_view, name='leaderboard'),
     path('dictionary/', views.dictionary_view, name='dictionary'),
+
+    path('admin/', admin.site.urls),
+    path('', index, name='index'),
+    path('login_page/', login_view, name='login'),
+    path('registry_page/', register_view, name='register'),
+    path('langlevel_page/', langlevel_view, name='langlevel'),
+    path('account_page/', profile_view, name='profile'),
 ]

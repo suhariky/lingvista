@@ -20,3 +20,6 @@ def leaderboard_view(request):
 
 def dictionary_view(request):
     return render(request, 'html/pages/dictionary_page.html')
+
+def langlevel_view(request):
+    return render(request, 'html/pages/langlevel_page.html')
