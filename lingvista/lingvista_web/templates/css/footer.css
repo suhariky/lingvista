@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+}
+
+footer {
+    background-color: #222325;
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+}
+
+footer > a {
+    color: #F6F6F6;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+footer > img {
+    margin-right: 30px;
+}
