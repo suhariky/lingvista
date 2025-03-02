@@ -122,7 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'lingvista/lingvista_web/static'),
+    (BASE_DIR / 'lingvista_web' / 'static').as_posix(),
 ]
 
 # Default primary key field type
