@@ -1,5 +1,37 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import User
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    streak = models.IntegerField(default=0)
+    completed_levels = models.IntegerField(default=0)
+    language_level = models.CharField(max_length=50)
+    achievements = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def increment_streak(self):
+        self.streak += 1
+        self.save()
+
+    def reset_streak(self):
+        self.streak = 0
+        self.save()
+
+    def complete_level(self):
+        self.completed_levels += 1
+        self.save()
+
+    def add_achievement(self, achievement):
+        if self.achievements:
+            self.achievements += f", {achievement}"
+        else:
+            self.achievements = achievement
+        self.save()
+
 
 class CustomUser(AbstractUser):
     nickname = models.CharField(max_length=255, unique=True, blank=True, null=True)
@@ -72,11 +104,3 @@ class UserProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.task.lesson.title} - Task {self.task.id}"
-
-class Profile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
-    bio = models.TextField(blank=True, null=True)
-    location = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return f"Profile of {self.user.username}"

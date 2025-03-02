@@ -1,6 +1,12 @@
 {% extends 'html/pages/base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>Выбор уровня языка</h1>
-    <p>Выберите свой уровень и начните обучение!</p>
+    <h1>Выберите уровень языка:</h1>
+    <a href="{% url 'lessons' level='a1' %}"><button>A1</button></a>
+    <a href="{% url 'lessons' level='a2' %}"><button>A2</button></a>
+    <a href="{% url 'lessons' level='b1' %}"><button>B1</button></a>
+    <a href="{% url 'lessons' level='b2' %}"><button>B2</button></a>
+    <a href="{% url 'lessons' level='c1' %}"><button>C1</button></a>
+    <a href="{% url 'lessons' level='c2' %}"><button>C2</button></a>
 {% endblock %}
