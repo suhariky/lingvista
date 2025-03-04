@@ -1,21 +1,21 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-{% if user.is_authenticated %}
-    <nav> <!-- авторизированный -->
-        <p>лого</p>
-        <ul class="right-content">
-            <li><a href="/langlevel_page/">tasks</a></li>  <!-- Абсолютный путь -->
-            <li><a href="/account_page/">profile</a></li>  <!-- Абсолютный путь -->
-        </ul>
-        <img src="test-img.png" alt="avatar" class="avatar right-content">
-    </nav>
-{% else %}
-    <nav> <!-- не авторизированный -->
-        <p>лого</p>
-        <ul class="right-content">
-            <li><a href="/login_page/">login</a></li>  <!-- Абсолютный путь -->
-            <li><a href="/registry_page/">sign up</a></li>  <!-- Абсолютный путь -->
-        </ul>
-    </nav>
-{% endif %}
 
+<header>
+    {% if user.is_authenticated %}
+        <nav> <!-- авторизированный -->
+            <p>лого</p>
+            <ul class="right-content">
+                <li><a href="/langlevel_page/">tasks</a></li>  <!-- Абсолютный путь -->
+                <li><a href="/account_page/">profile</a></li>  <!-- Абсолютный путь -->
+            </ul>
+            <img src="test-img.png" alt="avatar" class="avatar right-content">
+        </nav>
+    {% else %}
+        <nav> <!-- не авторизированный -->
+            <p>лого</p>
+                <ul class="right-content">
+                <li><a href="/login_page/">login</a></li>  <!-- Абсолютный путь -->
+                <li><a href="/registry_page/">sign up</a></li>  <!-- Абсолютный путь -->
+            </ul>
+        </nav>
+    {% endif %}
+</header>

@@ -1,8 +1,10 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/main_page.css' %}">{% endblock extra_css%}
+
+<main>
+    {% block content %}
     <div class="main-screen">
         <div class="main-screen-content">
             <div class="slogan">
@@ -12,12 +14,14 @@
             <div class="installation-links-content">
                 <h3>Start learning</h3>
                 <div class="installation-links">
-                    <a href=""><img src="{% static 'images/app-store-install.svg' %}" alt=""></a>
-                    <a href=""><img src="{% static 'images/app-store-install.svg' %}" alt=""></a>
-                    <a href=""><img src="{% static 'images/app-store-install.svg' %}" alt=""></a>
-                    <a href=""><img src="{% static 'images/app-store-install.svg' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
+                    <a href="#"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
+                    <a href="#"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
+                    <a href="#"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
+    {% endblock %}
+</main>
+

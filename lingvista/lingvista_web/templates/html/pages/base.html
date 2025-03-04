@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    {% block extra_css %}{% endblock %}
     <title>Lingvista</title>
 </head>
 <body>
-    <header role="header">
-        {% include 'html/elements/navbar.html' %}
-    </header>
-
-    <main role="main">
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer role="footer">
-        {% include 'html/elements/footer.html' %}
-    </footer>
+    {% include 'html/elements/navbar.html' %}
+    {% block content %}{% endblock %}
+    {% include 'html/elements/footer.html' %}
 </body>
 </html>

@@ -5,16 +5,15 @@ body {
 footer {
     background-color: #222325;
     width: 100%;
-    padding: 20px;
-    font-size: 20px;
+    padding: 30px 0;
 }
 
 footer > a {
     color: #F6F6F6;
-    text-decoration: none;
     margin-right: 10px;
 }
 
 footer > img {
+    padding-left: 20px;
     margin-right: 30px;
 }

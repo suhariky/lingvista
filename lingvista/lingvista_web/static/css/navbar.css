@@ -2,7 +2,7 @@ body { /* может что-то ломать */
     margin: 0;
 }
 
-nav {
+header > nav {
     height: 60px;
     background-color: #A2C1C3;
     display: flex;
@@ -10,23 +10,20 @@ nav {
     padding: 0 20px;
 }
 
-li {
+.right-content > li {
     display: inline-block;
     margin: 0 3px;
 }
 
-a {
-    text-decoration: none;
+.right-content > li > a {
     padding: 10px 18px;
     background-color: #6D9EA3;
     border-radius: 15px;
-    font-size: 20px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* временный шрифт */
-    color: aliceblue;
+    color: #F6F6F6;
     transition: background-color 0.2s;
 }
 
-a:hover {
+.right-content > li > a:hover {
     background-color: #6d9ea3b7;
 }
 
