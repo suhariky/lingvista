@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm
 from .models import Profile
 
-
 def main_page(request):
     return render(request, 'html/pages/main_page.html')
 
@@ -17,31 +16,22 @@ def register_view(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)  # Создаем профиль
+            Profile.objects.create(user=user)
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно.')
             return redirect('home')
     else:
         form = UserRegistrationForm()
-
     return render(request, 'html/pages/registry_page.html', {'form': form})
 
 def tasks_view(request):
     return render(request, 'html/pages/tasks_page.html')
 
-def profile_view(request):
-    return render(request, 'html/pages/account_page.html')
-
 def langlevel_view(request):
     return render(request, 'html/pages/langlevel_page.html')
 
-def accountedit_view(request):
-    return render(request, 'html/pages/accountedit_page.html')
-
 def lessons_view(request, level):
-    context = {
-        'level': level.upper(),
-    }
+    context = {'level': level.upper()}
     return render(request, 'html/pages/lessons_page.html', context)
 
 @login_required
@@ -64,4 +54,3 @@ def edit_profile(request):
 @login_required
 def profile_history(request):
     return render(request, 'user/profile_history.html')
-
