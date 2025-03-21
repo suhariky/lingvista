@@ -1,15 +1,29 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm
 from .models import Profile
+from django.views.decorators.http import require_POST
 
+@require_POST
+def custom_logout(request):
+    logout(request)
+    return redirect('main_page')
 
 def main_page(request):
     return render(request, 'html/pages/main_page.html')
 
 def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('main_page')
+        else:
+            messages.error(request, 'Неверные имя пользователя или пароль')
     return render(request, 'html/pages/login_page.html')
 
 def register_view(request):
@@ -17,18 +31,19 @@ def register_view(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Profile.objects.create(user=user)  # Создаем профиль
+            Profile.objects.create(user=user)
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно.')
-            return redirect('home')
+            return redirect('main_page')  # Исправлен редирект
     else:
         form = UserRegistrationForm()
-
     return render(request, 'html/pages/registry_page.html', {'form': form})
+
 
 def tasks_view(request):
     return render(request, 'html/pages/tasks_page.html')
 
+@login_required
 def profile_view(request):
     return render(request, 'html/pages/account_page.html')
 
