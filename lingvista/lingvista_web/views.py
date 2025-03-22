@@ -26,18 +26,26 @@ def register_view(request):
 
     return render(request, 'html/pages/registry_page.html', {'form': form})
 
-def tasks_view(request):
-    return render(request, 'html/pages/tasks_page.html')
+#@login_required
+def tasks_view(request, lesson):
+    context = {
+        'lesson': lesson,
+    }
+    return render(request, 'html/pages/tasks_page.html', context)
 
+#@login_required
 def profile_view(request):
     return render(request, 'html/pages/account_page.html')
 
+#@login_required
 def langlevel_view(request):
     return render(request, 'html/pages/langlevel_page.html')
 
+#@login_required
 def accountedit_view(request):
     return render(request, 'html/pages/accountedit_page.html')
 
+#@login_required
 def lessons_view(request, level):
     context = {
         'level': level.upper(),
