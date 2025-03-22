@@ -7,5 +7,8 @@
 <body>
     <h1>Уроки для уровня: {{ level }}</h1>
     <p>Здесь будут задания для вашего уровня.</p>
+    <a href="{% url 'tasks' lesson='1' %}"><button>Lesson1</button></a>
+    <a href="{% url 'tasks' lesson='2' %}"><button>Lesson2</button></a>
+    <a href="{% url 'tasks' lesson='3' %}"><button>Lesson3</button></a>
 </body>
 </html>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-    {% block extra_css %}{% endblock %}
-    <title>Lingvista</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+  {% block extra_css %}{% endblock %}
+  <title>{% block title %}Lingvista{% endblock %}</title>
 </head>
 <body>
-    {% include 'html/elements/navbar.html' %}
-    {% block content %}{% endblock %}
-    {% include 'html/elements/footer.html' %}
+  {% include 'html/elements/navbar.html' %}
+  {% block content %}{% endblock %}
+  {% include 'html/elements/footer.html' %}
 </body>
 </html>
