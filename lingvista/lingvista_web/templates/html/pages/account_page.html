@@ -1,20 +1,8 @@
+{% extends 'html/pages/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль пользователя</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/account_page.css' %}">{% endblock extra_css%}
+{% block content %}
 
-        <a href="{% url 'main_page' %}">
-            <img src="{% static 'logo.png' %}" alt="На главную страницу" />
-        </a>
-    </header>
 
     <div class="profile-container">
         <h1>Добро пожаловать, {{ user.username }}!</h1>
@@ -35,9 +23,4 @@
 
 
     </div>
-
-    <footer>
-        <p>© 2025 Lingvista</p>
-    </footer>
-</body>
-</html>
+{% endblock %}

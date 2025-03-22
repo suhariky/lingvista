@@ -34,11 +34,11 @@ def lessons_view(request, level):
     context = {'level': level.upper()}
     return render(request, 'html/pages/lessons_page.html', context)
 
-@login_required
+#@login_required
 def profile(request):
-    return render(request, 'user/profile.html', {'user': request.user})
+    return render(request, 'html/pages/account_page.html', {'user': request.user})
 
-@login_required
+#@login_required
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':
@@ -49,8 +49,8 @@ def edit_profile(request):
             return redirect('profile')
     else:
         form = ProfileEditForm(instance=profile)
-    return render(request, 'user/profile_edit.html', {'form': form})
+    return render(request, 'html/pages/account_page.html', {'form': form})
 
 @login_required
 def profile_history(request):
-    return render(request, 'user/profile_history.html')
+    return render(request, 'html/pages/profile_history.html')
