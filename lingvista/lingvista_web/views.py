@@ -18,7 +18,9 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(f"Username: {username}, Password: {password}")  # Отладочная информация
         user = authenticate(request, username=username, password=password)
+        print(f"User: {user}")  # Отладочная информация
         if user:
             login(request, user)
             return redirect('main_page')
