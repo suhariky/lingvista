@@ -5,7 +5,7 @@
         <div class="right-content">
             {% if user.is_authenticated %}
                 <ul class="right-content">
-                    <li><a href="{% url 'lessons' 'A1' %}">tasks</a></li>
+                    <li><a href="{% url 'langlevel' %}">tasks</a></li>
                     <li><a href="{% url 'profile_view' %}">profile</a></li>
                     <li>
                         <form action="{% url 'logout' %}" method="post">

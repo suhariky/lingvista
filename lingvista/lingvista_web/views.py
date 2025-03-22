@@ -80,7 +80,7 @@ def edit_profile(request):
             return redirect('profile')
     else:
         form = ProfileEditForm(instance=profile)
-    return render(request, 'html/pages/account_page.html', {'form': form})
+    return render(request, 'html/pages/accountedit_page.html', {'form': form})
 
 @login_required
 def profile_history(request):
