@@ -142,7 +142,11 @@ def lessons_view(request, level):
 
 @login_required
 def profile(request):
-    return render(request, 'html/pages/account_page.html', {'user': request.user})
+    profile = Profile.objects.get(user=request.user)
+    return render(request, 'html/pages/account_page.html', {
+        'user': request.user,
+        'profile': profile,
+    })
 
 @login_required
 def edit_profile(request):
