@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(file).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -131,3 +131,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'  # Имя URL для страницы входа
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
