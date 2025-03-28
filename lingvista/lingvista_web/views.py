@@ -161,6 +161,7 @@ def edit_profile(request):
         form = ProfileEditForm(instance=profile)
     return render(request, 'html/pages/accountedit_page.html', {'form': form})
 
+
 @login_required
 def profile_history(request):
     return render(request, 'html/pages/profile_history.html')
