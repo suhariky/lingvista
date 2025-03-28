@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.urls import path
 from lingvista_web import views
 from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.main_page, name='main_page'),
-    path('tasks_lesson<str:lesson>/', views.tasks_view, name='tasks'),
+    path('tasks_<str:level>_lesson<str:lesson>/', views.tasks_view, name='tasks'),
     path('login_page/', views.login_view, name='login'),
     path('registry_page/', views.register_view, name='register'),
     path('langlevel_page/', views.langlevel_view, name='langlevel'),
@@ -21,4 +23,4 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/history/', views.profile_history, name='profile_history'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
