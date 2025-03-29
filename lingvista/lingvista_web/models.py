@@ -19,6 +19,34 @@ class Profile(models.Model):
     language_level = models.CharField(max_length=50)
     achievements = models.TextField(blank=True)
 
+    def get_unlocked_levels(self):
+        levels = ['A1']  # A1 всегда доступен
+        level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+
+        for i in range(len(level_order) - 1):
+            current_level = level_order[i]
+            next_level = level_order[i + 1]
+
+            # Проверяем, пройдены ли все уроки текущего уровня на 70%
+            lessons = Lesson.objects.filter(language_level__level=current_level)
+            completed = True
+
+            for lesson in lessons:
+                progress = UserTasksProgress.objects.filter(
+                    user=self.user,
+                    level=current_level,
+                    lesson=lesson.lesson_number
+                ).first()
+
+                if not progress or progress.result < 70:
+                    completed = False
+                    break
+
+            if completed and next_level not in levels:
+                levels.append(next_level)
+
+        return levels
+
     def __str__(self):
         return self.user.username
 

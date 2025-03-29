@@ -60,6 +60,7 @@ def tasks_view(request, level, lesson):
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
+
         # Проверяем, не пройден ли уже урок
         existing_progress = UserTasksProgress.objects.filter(
             user=request.user,
@@ -111,6 +112,21 @@ def tasks_view(request, level, lesson):
 
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
 
+        if score >= 70:
+            # Проверяем, нужно ли открыть следующий уровень
+            current_level = language_level.level
+            level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+            if current_level in level_order:
+                index = level_order.index(current_level)
+                if index < len(level_order) - 1:
+                    next_level = level_order[index + 1]
+                    # Проверяем, что следующий уровень еще не открыт
+                    if not UserTasksProgress.objects.filter(
+                            user=request.user,
+                            level=next_level
+                    ).exists():
+                        messages.info(request, f'Поздравляем! Вам открыт уровень {next_level}!')
+
 
         # Сохраняем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
@@ -146,7 +162,33 @@ def profile_view(request):
 
 @login_required
 def langlevel_view(request):
-    return render(request, 'html/pages/langlevel_page.html')
+    unlocked_levels = request.user.profile.get_unlocked_levels()
+    all_levels = LanguageLevel.objects.all().order_by('level')
+
+    levels_data = []
+    for level in all_levels:
+        levels_data.append({
+            'level': level,
+            'is_unlocked': level.level in unlocked_levels,
+            'is_completed': check_level_completion(request.user, level.level)
+        })
+
+    return render(request, 'html/pages/langlevel_page.html', {
+        'levels_data': levels_data
+    })
+
+
+def check_level_completion(user, level):
+    lessons = Lesson.objects.filter(language_level__level=level)
+    for lesson in lessons:
+        progress = UserTasksProgress.objects.filter(
+            user=user,
+            level=level,
+            lesson=lesson.lesson_number
+        ).first()
+        if not progress or progress.result < 100:
+            return False
+    return True
 
 @login_required
 def accountedit_view(request):

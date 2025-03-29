@@ -6,23 +6,17 @@
 {% block content %}
     <h1>Выберите уровень языка:</h1>
     <div class="links-block">
-        <div class="link-section">
-            <a href="{% url 'lessons' level='a1' %}">A1</a>
+        {% for level_data in levels_data %}
+        <div class="link-section {% if not level_data.is_unlocked %}locked-level{% endif %} {% if level_data.is_completed %}completed-level{% endif %}">
+            {% if level_data.is_unlocked %}
+                <a href="{% url 'lessons' level=level_data.level.level|lower %}">
+                    {{ level_data.level.level }} - {{ level_data.level.description }}
+                    {% if level_data.is_completed %}✓{% endif %}
+                </a>
+            {% else %}
+                <span>{{ level_data.level.level }} - {{ level_data.level.description }}</span>
+            {% endif %}
         </div>
-        <div class="link-section">
-            <a href="{% url 'lessons' level='a2' %}">A2</a>
-        </div>
-        <div class="link-section">
-            <a href="{% url 'lessons' level='b1' %}">B1</a>
-        </div>
-        <div class="link-section">
-            <a href="{% url 'lessons' level='b2' %}">B2</a>
-        </div>
-        <div class="link-section">
-            <a href="{% url 'lessons' level='c1' %}">C1</a>
-        </div>
-        <div class="link-section">
-            <a href="{% url 'lessons' level='c2' %}">C2</a>
-        </div>
-    </div> 
+        {% endfor %}
+    </div>
 {% endblock %}
