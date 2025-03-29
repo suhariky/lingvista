@@ -1,9 +1,9 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/account_page.css' %}">{% endblock extra_css%}
+
+
 {% block content %}
-
-
     <div class="profile-container">
         <h1>Добро пожаловать, {{ user.username }}!</h1>
 
@@ -20,7 +20,5 @@
                 <a href="/main_page/" logout=true" class="button">Выйти</a>
             {% endif %}
         </div>
-
-
     </div>
 {% endblock %}

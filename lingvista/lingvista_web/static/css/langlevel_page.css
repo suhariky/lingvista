@@ -1,0 +1,28 @@
+.link-section {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-top: 22px;
+    border-radius: 15px;
+    width: 760px;
+    height: 50px;
+    background-color: #6D9EA3;
+}
+
+.link-section > a {
+    color: #F6F6F6;;
+    padding-left: 15px;
+}
+
+.links-block {
+    padding-bottom: 15px;
+}
+
+h1{
+    text-align: center;
+    margin: 0;
+    padding-top: 10px;
+    font-size: x-large;
+}

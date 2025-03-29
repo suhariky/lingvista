@@ -1,12 +1,28 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 
+{% block extra_css %}<link rel="stylesheet" href="/static/css/langlevel_page.css">{% endblock extra_css%}
+
 {% block content %}
     <h1>Выберите уровень языка:</h1>
-    <a href="{% url 'lessons' level='a1' %}"><button>A1</button></a>
-    <a href="{% url 'lessons' level='a2' %}"><button>A2</button></a>
-    <a href="{% url 'lessons' level='b1' %}"><button>B1</button></a>
-    <a href="{% url 'lessons' level='b2' %}"><button>B2</button></a>
-    <a href="{% url 'lessons' level='c1' %}"><button>C1</button></a>
-    <a href="{% url 'lessons' level='c2' %}"><button>C2</button></a>
+    <div class="links-block">
+        <div class="link-section">
+            <a href="{% url 'lessons' level='a1' %}">A1</a>
+        </div>
+        <div class="link-section">
+            <a href="{% url 'lessons' level='a2' %}">A2</a>
+        </div>
+        <div class="link-section">
+            <a href="{% url 'lessons' level='b1' %}">B1</a>
+        </div>
+        <div class="link-section">
+            <a href="{% url 'lessons' level='b2' %}">B2</a>
+        </div>
+        <div class="link-section">
+            <a href="{% url 'lessons' level='c1' %}">C1</a>
+        </div>
+        <div class="link-section">
+            <a href="{% url 'lessons' level='c2' %}">C2</a>
+        </div>
+    </div> 
 {% endblock %}
