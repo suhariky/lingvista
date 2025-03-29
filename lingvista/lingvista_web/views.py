@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm
-from .models import Profile, LanguageLevel, Lesson, Task
+from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
 from django.views.decorators.http import require_POST
 
 @require_POST
@@ -39,47 +39,57 @@ def register_view(request):
         form = UserRegistrationForm()
     return render(request, 'html/pages/registry_page.html', {'form': form})
 
-#@login_required
+
+@login_required
 def tasks_view(request, level, lesson):
+    # Проверяем, не пройден ли уже урок на 100%
+    progress = UserTasksProgress.objects.filter(
+        user=request.user,
+        level=level.upper(),
+        lesson=lesson,
+        result=100
+    ).first()
+
+    if progress:
+        messages.warning(request, 'Вы уже прошли этот урок на 100%!')
+        return redirect('lessons', level=level)
+
+    # Остальной код представления остается без изменений
     language_level = get_object_or_404(LanguageLevel, level=level.upper())
     lesson_obj = get_object_or_404(Lesson, language_level=language_level, lesson_number=lesson)
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
+        # Проверяем, не пройден ли уже урок
+        existing_progress = UserTasksProgress.objects.filter(
+            user=request.user,
+            level=level.upper(),
+            lesson=lesson,
+            result=100
+        ).exists()
+
+        if existing_progress:
+            messages.warning(request, 'Вы уже завершили этот урок!')
+            return redirect('lessons', level=level)
         task_results = []
         correct_count = 0
 
         for task in tasks:
             user_answer = None
             is_correct = False
-            correct_answer_display = task.correct_answer  # Для отображения пользователю
+            correct_answer_display = task.correct_answer
 
-            # Для вопросов с вариантами ответов
             if task.option1 or task.option2 or task.option3:
                 correct_answer = [
                     task.option1,
                     task.option2,
                     task.option3
-                ][int(task.correct_answer)-1]
+                ][int(task.correct_answer) - 1]
                 user_answer = request.POST.get(f'task_{task.id}')
-                print(
-                    "\n", user_answer,
-                    "\n", task.correct_answer,
-                    "\n", task.option1,
-                    "\n", task.option2,
-                    "\n", task.option3,
-                    "\n", user_answer == task.option1 == task.correct_answer,
-                    "\n", user_answer == task.option2 == task.correct_answer,
-                    "\n", user_answer == task.option3 == task.correct_answer,
-                )
-                # Вариант 1: если correct_answer хранит значение (текст варианта)
                 is_correct = user_answer == correct_answer
 
-            # Для аудио-вопросов
             elif task.audio:
                 user_answer = request.POST.get(f'audio_answer_{task.id}', '').strip()
-                print(user_answer)
-                # Удаляем лишние пробелы и приводим к нижнему регистру
                 normalized_user_answer = ' '.join(user_answer.split()).lower()
                 normalized_correct = ' '.join(task.correct_answer.split()).lower()
                 is_correct = normalized_user_answer == normalized_correct
@@ -100,6 +110,15 @@ def tasks_view(request, level, lesson):
             })
 
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
+
+
+        # Сохраняем прогресс пользователя
+        UserTasksProgress.objects.update_or_create(
+            user=request.user,
+            level=level.upper(),
+            lesson=lesson,
+            defaults={'result': score}
+        )
 
         context = {
             'level': level,
@@ -133,10 +152,33 @@ def langlevel_view(request):
 def accountedit_view(request):
     return render(request, 'html/pages/accountedit_page.html')
 
+
 @login_required
 def lessons_view(request, level):
+    # Получаем все уроки для данного уровня
+    lessons = Lesson.objects.filter(language_level__level=level.upper()).order_by('lesson_number')
+
+    # Получаем прогресс пользователя по этим урокам
+    user_progress = UserTasksProgress.objects.filter(
+        user=request.user,
+        level=level.upper()
+    )
+
+    # Создаем список уроков с информацией о доступности
+    lessons_data = []
+    for lesson in lessons:
+        progress = user_progress.filter(lesson=lesson.lesson_number).first()
+        is_completed = progress and progress.result == 100
+
+        lessons_data.append({
+            'lesson': lesson,
+            'is_completed': is_completed,
+            'score': progress.result if progress else 0
+        })
+
     context = {
         'level': level.upper(),
+        'lessons_data': lessons_data,
     }
     return render(request, 'html/pages/lessons_page.html', context)
 
