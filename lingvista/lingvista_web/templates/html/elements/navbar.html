@@ -1,21 +1,30 @@
-
+{% load static %}
 <header>
-    {% if user.is_authenticated %}
-        <nav> <!-- авторизированный -->
-            <p>лого</p>
-            <ul class="right-content">
-                <li><a href="/langlevel_page/">tasks</a></li>  <!-- Абсолютный путь -->
-                <li><a href="/account_page/">profile</a></li>  <!-- Абсолютный путь -->
-            </ul>
-            <img src="test-img.png" alt="avatar" class="avatar right-content">
-        </nav>
-    {% else %}
-        <nav> <!-- не авторизированный -->
-            <p>лого</p>
+    <nav>
+        <p>лого</p>
+        <div class="right-content">
+            {% if user.is_authenticated %}
                 <ul class="right-content">
-                <li><a href="/login_page/">login</a></li>  <!-- Абсолютный путь -->
-                <li><a href="/registry_page/">sign up</a></li>  <!-- Абсолютный путь -->
-            </ul>
-        </nav>
-    {% endif %}
+                    <li><a href="{% url 'langlevel' %}">tasks</a></li>
+                    <li><a href="{% url 'profile_view' %}">profile</a></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">log out</button>
+                        </form>
+                    </li>
+                </ul>
+                {% if user.profile.profile_photo %}
+                    <img src="{{ user.profile.profile_photo.url }}" class="avatar" alt="Аватар">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" class="avatar" alt="Аватар">
+                {% endif %}
+            {% else %}
+                <ul class="right-content">
+                    <li><a href="{% url 'login' %}">log in</a></li>
+                    <li><a href="{% url 'register' %}">sign in</a></li>
+                </ul>
+            {% endif %}
+        </div>
+    </nav>
 </header>

@@ -1,11 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Уроки для уровня {{ level }}</title>
-</head>
-<body>
-    <h1>Уроки для уровня: {{ level }}</h1>
-    <p>Здесь будут задания для вашего уровня.</p>
-</body>
-</html>
+{% extends 'html/pages/base.html' %}
+{% load static %}
+
+{% block extra_css %}<link rel="stylesheet" href="/static/css/main_page.css">{% endblock extra_css%}
+
+{% block content %}
+    <p>Уроки для уровня: {{ level }}</p>
+
+    <div class="lessons-container">
+        {% for lesson_data in lessons_data %}
+            <div class="lesson-card {% if lesson_data.is_completed %}completed-lesson{% endif %}">
+                <h3>{{ lesson_data.lesson.title }}</h3>
+                <p>{{ lesson_data.lesson.description|truncatechars:50 }}</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ lesson_data.score }}%"></div>
+                </div>
+                <p>Прогресс: {{ lesson_data.score }}%</p>
+
+                {% if not lesson_data.is_completed %}
+                    <a href="{% url 'tasks' level=level lesson=lesson_data.lesson.lesson_number %}">
+                        <button>Начать урок</button>
+                    </a>
+                {% else %}
+                    <button disabled>Урок пройден</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

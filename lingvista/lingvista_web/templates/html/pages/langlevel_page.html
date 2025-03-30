@@ -1,12 +1,22 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 
+{% block extra_css %}<link rel="stylesheet" href="/static/css/langlevel_page.css">{% endblock extra_css%}
+
 {% block content %}
     <h1>Выберите уровень языка:</h1>
-    <a href="{% url 'lessons' level='a1' %}"><button>A1</button></a>
-    <a href="{% url 'lessons' level='a2' %}"><button>A2</button></a>
-    <a href="{% url 'lessons' level='b1' %}"><button>B1</button></a>
-    <a href="{% url 'lessons' level='b2' %}"><button>B2</button></a>
-    <a href="{% url 'lessons' level='c1' %}"><button>C1</button></a>
-    <a href="{% url 'lessons' level='c2' %}"><button>C2</button></a>
+    <div class="links-block">
+        {% for level_data in levels_data %}
+        <div class="link-section {% if not level_data.is_unlocked %}locked-level{% endif %} {% if level_data.is_completed %}completed-level{% endif %}">
+            {% if level_data.is_unlocked %}
+                <a href="{% url 'lessons' level=level_data.level.level|lower %}">
+                    {{ level_data.level.level }} - {{ level_data.level.description }}
+                    {% if level_data.is_completed %}✓{% endif %}
+                </a>
+            {% else %}
+                <span>{{ level_data.level.level }} - {{ level_data.level.description }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
 {% endblock %}

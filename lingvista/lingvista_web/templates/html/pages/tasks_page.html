@@ -1,0 +1,103 @@
+{% extends 'html/pages/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container">
+            {% if show_answers %}
+            <div class="results-summary">
+                <h2>Ваш результат: {{ score }}%</h2>
+                <p>Правильных ответов: {{ correct_count }} из {{ tasks|length }}</p>
+            </div>
+            {% endif %}
+
+            <div class="tasks-container">
+                {% for task in tasks %}
+                <div class="task-card">
+                    <div class="task-question">
+                        <h3>Задание {{ forloop.counter }}</h3>
+                        <p>{{ task.question }}</p>
+                    </div>
+
+                    {% if task.option1 or task.option2 or task.option3 %}
+                    <div class="task-options">
+                        {% if task.option1 %}
+                        <div class="form-check">
+                            <input type="radio" name="task_{{ task.id }}" id="option1_{{ task.id }}" value="{{ task.option1 }}"
+                                   {% if show_answers and task.user_answer == task.option1 %}checked{% endif %}>
+                            <label for="option1_{{ task.id }}">{{ task.option1 }}</label>
+                            {% if show_answers and task.option1 == task.correct_answer %}
+                            <span class="correct-option-mark">✓ Правильный вариант</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if task.option2 %}
+                        <div class="form-check">
+                            <input type="radio" name="task_{{ task.id }}" id="option2_{{ task.id }}" value="{{ task.option2 }}"
+                                   {% if show_answers and task.user_answer == task.option2 %}checked{% endif %}>
+                            <label for="option2_{{ task.id }}">{{ task.option2 }}</label>
+                            {% if show_answers and task.option2 == task.correct_answer %}
+                            <span class="correct-option-mark">✓ Правильный вариант</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if task.option3 %}
+                        <div class="form-check">
+                            <input type="radio" name="task_{{ task.id }}" id="option3_{{ task.id }}" value="{{ task.option3 }}"
+                                   {% if show_answers and task.user_answer == task.option3 %}checked{% endif %}>
+                            <label for="option3_{{ task.id }}">{{ task.option3 }}</label>
+                            {% if show_answers and task.option3 == task.correct_answer %}
+                            <span class="correct-option-mark">✓ Правильный вариант</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if task.audio %}
+                    <div class="audio-task">
+                        <div class="audio-player">
+                            <audio controls>
+                                <source src="{{ task.audio.audio_file.url }}" type="audio/mpeg">
+                                Ваш браузер не поддерживает аудио элемент.
+                            </audio>
+                        </div>
+                        <div class="audio-answer-input">
+                            <label for="audio_answer_{{ task.id }}">Введите ваш ответ:</label>
+                            <input type="text" id="audio_answer_{{ task.id }}"
+                                   name="audio_answer_{{ task.id }}" class="form-control"
+                                   placeholder="Ответ..."
+                                   {% if show_answers %}value="{{ task.user_answer }}"{% endif %}>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if show_answers %}
+                    <div class="correct-answer {% if task.is_correct %}correct{% else %}incorrect{% endif %}">
+                        <p><strong>Правильный ответ:</strong> {{ task.correct_answer }}</p>
+                        <p class="result-status">
+                            {% if task.is_correct %}
+                                ✓ Верно
+                            {% else %}
+                                ✗ Неверно
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="submit-section">
+                {% if show_answers %}
+                    <a href="{% url 'lessons' level=level %}" class="submit-btn">К урокам</a>
+                {% else %}
+                    <button type="submit" class="submit-btn">Проверить ответы</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
