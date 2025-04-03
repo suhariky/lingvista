@@ -72,18 +72,38 @@ header img {
 }
 
 .profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .profile-photo img {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #ccc;
-    margin-bottom: 10px;
+}
+
+.empty-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc; /* Серый фон */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-photo::before {
+    content: "\f007";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 40px;
+    color: #777;
 }
 
 .button-container {

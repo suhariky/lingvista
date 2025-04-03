@@ -3,16 +3,17 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/account_page.css' %}">
 {% endblock extra_css %}
+
 {% block content %}
-
 <div class="profile-container-centered">
-
     <div class="profile-header">
-        {% if profile.profile_photo %}
-            <div class="profile-photo">
+        <div class="profile-photo">
+            {% if profile.profile_photo %}
                 <img src="{{ profile.profile_photo.url }}" alt="Фото профиля">
-            </div>
-        {% endif %}
+            {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="Фото профиля">
+            {% endif %}
+        </div>
 
         <div class="user-basic-info">
             <p><strong>Имя:</strong> {{ user.username }}</p>
@@ -22,7 +23,7 @@
     </div>
 
     <div class="button-container">
-        <a href="/accountedit_page/" class="button">Редактировать</a>
+        <a href="{% url 'edit_profile' %}" class="button">Редактировать</a>
     </div>
 
     <div class="stats-box">
@@ -31,7 +32,5 @@
         <p><strong>Пройдено уровней:</strong> {{ profile.completed_levels }}</p>
         <p><strong>Достижения:</strong> {{ profile.achievements }}</p>
     </div>
-
 </div>
-
 {% endblock %}

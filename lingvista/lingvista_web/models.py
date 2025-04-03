@@ -16,8 +16,11 @@ class Profile(models.Model):
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     streak = models.IntegerField(default=0)
     completed_levels = models.IntegerField(default=0)
-    language_level = models.CharField(max_length=50)
+    language_level = models.CharField(max_length=50, blank=True)
     achievements = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username
 
     def get_unlocked_levels(self):
         levels = ['A1']  # A1 всегда доступен
