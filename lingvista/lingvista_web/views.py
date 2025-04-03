@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm
-from .models import Profile
 from django.views.decorators.http import require_POST
+from .models import Profile, UserTasksProgress
 
 @require_POST
 def custom_logout(request):
@@ -68,11 +68,14 @@ def lessons_view(request, level):
     return render(request, 'html/pages/lessons_page.html', context)
 
 @login_required
+@login_required
 def profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+    task_progress = UserTasksProgress.objects.filter(user=request.user)
     return render(request, 'html/pages/account_page.html', {
         'user': request.user,
         'profile': profile,
+        'task_progress': task_progress,
     })
 
 @login_required
