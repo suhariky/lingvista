@@ -2,21 +2,21 @@
 {% block title %}Вход{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="/static/css/authorization.css">{% endblock extra_css%}
 {% block content %}
-<h2>Вход</h2>
 <form method="post">
+  <h2>Log in</h2>
   {% csrf_token %}
   <div class="form-group">
-    <label for="username">username:</label>
+    <p for="username">Username:</p>
     <input type="text" name="username" class="form-control" required>
   </div>
   <div class="form-group">
-    <label for="password">Пароль:</label>
+    <p for="password">Password:</p>
     <input type="password" name="password" class="form-control" required>
   </div>
-  <button type="submit" class="btn btn-primary">log in</button>
+  <button type="submit" class="btn btn-primary">Log in</button>
+  <p class="mt-3">
+    Dont have an account? <a href="{% url 'register' %}">Sign in</a><br>
+    <a href="{% url 'password_reset' %}">Forgot password?</a>
+  </p>
 </form>
-<p class="mt-3">
-  dont have an account? <a href="{% url 'register' %}">sign in</a><br>
-  <a href="{% url 'password_reset' %}">forgot password?</a>
-</p>
 {% endblock %}
