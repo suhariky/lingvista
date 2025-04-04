@@ -1,13 +1,18 @@
 {% extends 'html/pages/base.html' %}
 {% block title %}Редактировать профиль{% endblock %}
+{% block extra_css %}
+{% load static %}
+
+  <link rel="stylesheet" href="{% static 'css/accountedit_page.css' %}">
+{% endblock %}
 
 {% block content %}
-
-<h2>Редактировать профиль</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Сохранить</button>
-</form>
-
+  <div class="container">
+    <h2>Редактировать профиль</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Сохранить</button>
+    </form>
+  </div>
 {% endblock %}

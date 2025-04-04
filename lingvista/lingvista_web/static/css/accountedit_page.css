@@ -1,0 +1,74 @@
+/* accountedit_page.css */
+
+/* Глобальные стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa !important; /* Светлый фон */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Центрирование контейнера */
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff; /* Чистый белый */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Форма */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Поля ввода */
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background: #fff;
+    transition: 0.3s;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+/* Кнопка */
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Для мелких экранов */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+}
