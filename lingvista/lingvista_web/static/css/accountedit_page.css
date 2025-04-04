@@ -1,71 +1,65 @@
-/* accountedit_page.css */
-
-/* Глобальные стили */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa !important; /* Светлый фон */
+    background-color: #f0f4f3;
     color: #333;
     margin: 0;
     padding: 0;
 }
 
-/* Центрирование контейнера */
 .container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background: #ffffff; /* Чистый белый */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Заголовок */
 h2 {
     text-align: center;
-    color: #333;
+    color: white;
     font-size: 24px;
+    background-color: #6d8b74;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
 }
 
-/* Форма */
 form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Поля ввода */
 input, textarea, select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 16px;
     background: #fff;
     transition: 0.3s;
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #28a745;
+    border-color: #6d8b74;
     outline: none;
 }
 
-/* Кнопка */
 .btn-success {
-    background-color: #28a745;
+    background-color: #5d7769;
     color: white;
-    padding: 12px;
+    padding: 14px;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 8px;
     font-size: 16px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #4f685b;
 }
 
-/* Для мелких экранов */
 @media (max-width: 600px) {
     .container {
         width: 90%;
