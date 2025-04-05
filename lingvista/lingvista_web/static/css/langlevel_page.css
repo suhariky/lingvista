@@ -11,9 +11,13 @@
     background-color: #6D9EA3;
 }
 
-.link-section > a {
-    color: #F6F6F6;;
+.link-section > a, span {
+    color: #F6F6F6;
     padding-left: 15px;
+}
+
+.link-section > span {
+    color: black;
 }
 
 .links-block {
