@@ -1,9 +1,19 @@
-.profile-container {
-    padding: 20px;
-    text-align: left;
-    max-width: 800px;
-    margin: 0 auto;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
+header {
+    background-color: #333;
+    padding: 10px;
+}
+
+header img {
+    width: 50px;
+    height: 50px;
+}
+
 
 .user-info {
     margin-bottom: 20px;
@@ -12,18 +22,17 @@
 .button-container a {
     display: inline-block;
     margin: 10px 0;
-    padding: 15px 25px;
-    background-color: #6D9EA3;
-    color: #F6F6F6;
+    padding: 10px 20px;
+    background-color: #375356;
+    color: white;
     text-decoration: none;
-    border-radius: 15px;
+    border-radius: 5px;
     width: 200px;
     text-align: center;
-    transition: background-color 0.2s;
 }
 
 .button-container a:hover {
-    background-color: #6d9ea3b7;
+    background-color: #375356;
 }
 
 .profile-container-centered {
@@ -54,6 +63,7 @@
     gap: 0px;
     margin-top: 5px;
 }
+}
 
 .language-level {
     font-size: 18px;
@@ -62,18 +72,36 @@
 }
 
 .profile-photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .profile-photo img {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+}
+
+.empty-photo {
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    border: 2px solid #ccc;
-    margin-bottom: 10px;
+    background-color: #ccc; /* Серый фон */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-photo::before {
+    content: "\f007";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 40px;
+    color: #777;
 }
 
 .button-container {
@@ -90,11 +118,44 @@
 }
 
 .stats-box {
-    background-color: #1f1f1f;
+    background-color: #333;
     color: white;
-    border-radius: 15px;
-    padding: 25px;
-    font-size: 18px;
+    padding: 15px;
     margin-top: 20px;
+    border-radius: 8px;
     text-align: left;
+}
+
+.task-progress-box {
+    background-color: #1e1e1e;
+    color: white;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.task-progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.task-progress-table th, .task-progress-table td {
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+}
+
+.task-progress-table th {
+    background-color: #333;
+}
+
+.task-progress-table tr:nth-child(even) {
+    background-color: #252525;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
 }

@@ -156,9 +156,17 @@ def tasks_view(request, level, lesson):
     }
     return render(request, 'html/pages/tasks_page.html', context)
 
+
 @login_required
 def profile_view(request):
-    return render(request, 'html/pages/account_page.html')
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    task_progress = UserTasksProgress.objects.filter(user=request.user)
+    return render(request, 'html/pages/account_page.html', {
+        'user': request.user,
+        'profile': profile,
+        'task_progress': task_progress,
+    })
+
 
 @login_required
 def langlevel_view(request):
@@ -189,6 +197,7 @@ def check_level_completion(user, level):
         if not progress or progress.result < 100:
             return False
     return True
+
 
 @login_required
 def accountedit_view(request):
@@ -226,23 +235,27 @@ def lessons_view(request, level):
 
 @login_required
 def profile(request):
-    profile = Profile.objects.get(user=request.user)
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    task_progress = UserTasksProgress.objects.filter(user=request.user)
     return render(request, 'html/pages/account_page.html', {
         'user': request.user,
         'profile': profile,
+        'task_progress': task_progress,
     })
 
 @login_required
 def edit_profile(request):
-    profile = Profile.objects.get(user=request.user)
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Профиль обновлён.')
-            return redirect('profile')
+            return redirect('profile_view')
     else:
         form = ProfileEditForm(instance=profile)
+
     return render(request, 'html/pages/accountedit_page.html', {'form': form})
 
 @login_required

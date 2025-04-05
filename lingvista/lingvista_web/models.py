@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Audio(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)  # Название аудио
     audio_file = models.FileField(upload_to='audio/', blank=True, null=True)  # Файл аудио
@@ -11,13 +12,17 @@ class Audio(models.Model):
     def __str__(self):
         return self.title or "Audio"
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     streak = models.IntegerField(default=0)
     completed_levels = models.IntegerField(default=0)
-    language_level = models.CharField(max_length=50)
+    language_level = models.CharField(max_length=50, blank=True)
     achievements = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username
 
     def get_unlocked_levels(self):
         levels = ['A1']  # A1 всегда доступен
@@ -87,6 +92,7 @@ class LanguageLevel(models.Model):
     def __str__(self):
         return self.level
 
+
 class Lesson(models.Model):
     language_level = models.ForeignKey(LanguageLevel, on_delete=models.CASCADE, related_name='lessons')
     lesson_number = models.IntegerField()
@@ -95,6 +101,7 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.language_level.level} - Lesson {self.lesson_number}: {self.title}"
+
 
 class Task(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
@@ -108,24 +115,16 @@ class Task(models.Model):
     def __str__(self):
         return f"Task for {self.lesson.title}"
 
-# class UserProgress(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress')
-#     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-#     completed = models.BooleanField(default=False)
-#     date_completed = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return f"{self.user.username} - {self.task.lesson.title} - Task {self.task.id}"
 
 class UserTasksProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    level = models.CharField(max_length=2, default='A1')  # Добавьте default
-    lesson = models.IntegerField(default=1)  # Добавьте default
-    result = models.IntegerField(default=0)  # Добавьте default
+    level = models.CharField(max_length=2, default='A1')
+    lesson = models.IntegerField(default=1)
+    result = models.IntegerField(default=0)
     date_completed = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'level', 'lesson')  # Чтобы не было дубликатов
+        unique_together = ('user', 'level', 'lesson')
 
     def __str__(self):
         return f"{self.user.username} - Level {self.level} - Lesson {self.lesson} - Result {self.result}%"
