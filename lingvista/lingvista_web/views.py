@@ -156,10 +156,17 @@ def tasks_view(request, level, lesson):
     }
     return render(request, 'html/pages/tasks_page.html', context)
 
+
 @login_required
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-    return render(request, 'html/pages/account_page.html', {'profile': profile})
+    task_progress = UserTasksProgress.objects.filter(user=request.user)
+    return render(request, 'html/pages/account_page.html', {
+        'user': request.user,
+        'profile': profile,
+        'task_progress': task_progress,
+    })
+
 
 @login_required
 def langlevel_view(request):
@@ -190,6 +197,7 @@ def check_level_completion(user, level):
         if not progress or progress.result < 100:
             return False
     return True
+
 
 @login_required
 def accountedit_view(request):

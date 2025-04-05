@@ -39,10 +39,10 @@
         {% for progress in task_progress %}
             <div class="task-progress-item">
                 <div class="task-item">
-                    <strong>Задание:</strong> {{ progress.task.question }}
+                    <strong>Урок:</strong> {{ progress.level }}-{{ progress.lesson }}
                 </div>
                 <div class="status-item">
-                    <strong>Статус:</strong> {% if progress.completed %}✔ Выполнено{% else %}✖ Не выполнено{% endif %}
+                    <strong>Статус:</strong> {% if progress.result == 100 %}✔ {% else %}✖ {% endif %} {{ progress.result }}%
                 </div>
                 <div class="date-item">
                     <strong>Дата выполнения:</strong> {% if progress.date_completed %}{{ progress.date_completed|date:"d.m.Y H:i" }}{% else %}-{% endif %}
