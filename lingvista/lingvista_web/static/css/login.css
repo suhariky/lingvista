@@ -1,0 +1,47 @@
+/* lingvista_web/static/css/login.css */
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #34495e;
+    font-size: 0.9em;
+}
+
+.form-control {
+    width: 40%;
+    padding: 0.6rem;
+    border: 2px solid #ecf0f1;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+}
+
+/* Округление кнопки */
+.btn-primary {
+    background: #3498db;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 3px;  /* Сильно увеличенный радиус */
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    margin-top: 1.2rem;   /* Добавлен отступ сверху */
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+}
+
+.mt-3 {
+    margin-top: 1.2rem !important;
+}
+
+/* Дополнительный отступ для нижнего поля ввода */
+.form-group:last-child {
+    margin-bottom: 1.5rem;  /* Увеличенный отступ */
+}
