@@ -14,6 +14,7 @@ class ProfileEditForm(forms.ModelForm):
         self.fields['achievements'].widget.attrs.update({'placeholder': 'Введите достижения'})
         self.fields['language_level'].widget.attrs.update({'placeholder': 'Введите уровень языка'})
 
+
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 

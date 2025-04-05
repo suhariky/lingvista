@@ -111,13 +111,6 @@ class Task(models.Model):
     def __str__(self):
         return f"Task for {self.lesson.title}"
 
-class UserProgress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress')
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    completed = models.BooleanField(default=False)
-    date_completed = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"{self.user.username} - {self.task.lesson.title} - Task {self.task.id}"
 
 class UserTasksProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
