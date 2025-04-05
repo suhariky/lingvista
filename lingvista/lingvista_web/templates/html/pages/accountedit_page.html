@@ -1,11 +1,12 @@
 {% extends 'html/pages/base.html' %}
 {% block title %}Редактировать профиль{% endblock %}
-
 {% block content %}
-  <h2>Редактировать профиль</h2>
-  <form method="post" enctype="multipart/form-data">
+
+<h2>Редактировать профиль</h2>
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-success">Сохранить</button>
-  </form>
+</form>
+
 {% endblock %}
