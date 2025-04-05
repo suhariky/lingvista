@@ -6,16 +6,18 @@
     display: inline-block;
     margin: 10px 0;
     padding: 10px 20px;
-    background-color: #375356;
-    color: white;
+    background-color: #A2C1C3;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    color: #1e1e1e;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 15px;
     width: 200px;
     text-align: center;
 }
 
 .button-container a:hover {
-    background-color: #416266;
+    background-color: #afd0d3;
 }
 
 .profile-container-centered {
@@ -45,6 +47,7 @@
     flex-direction: column;
     gap: 0px;
     margin-top: 5px;
+    margin-left: 10px;
 }
 
 .language-level {
@@ -100,7 +103,7 @@
 }
 
 .stats-box {
-    background-color: #333;
+    background-color: #1e1e1e;
     color: white;
     padding: 15px;
     margin-top: 20px;
@@ -135,4 +138,20 @@
 
 .task-progress-table tr:nth-child(even) {
     background-color: #252525;
+}
+
+.user-basic-info > p {
+    margin: 10px;
+}
+
+.stats-box > h3, .task-progress-box > h3 {
+    margin: 5px 0;
+}
+
+.stats-box > p, .task-progress-box > p {
+    margin: 15px 0;
+}
+
+.task-progress-item {
+    margin: 15px 0;
 }
