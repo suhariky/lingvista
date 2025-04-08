@@ -1,14 +1,6 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f3;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
 .container {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 0px auto;
     padding: 20px;
     background: #ffffff;
     border-radius: 12px;
@@ -65,4 +57,8 @@ input:focus, textarea:focus, select:focus {
         width: 90%;
         padding: 15px;
     }
+}
+
+main {
+    padding-top: 10px;
 }
