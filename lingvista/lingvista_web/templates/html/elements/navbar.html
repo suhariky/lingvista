@@ -1,5 +1,5 @@
 {% load static %}
-{% block extra_css %}<link rel="stylesheet" href="/static/css/navbar.css">{% endblock extra_css%}
+<link rel="stylesheet" href="/static/css/navbar.css">
 <header>
     <nav>
        <a href="/" class="logo-link">
@@ -16,12 +16,12 @@
                             <button type="submit" class="logout-btn">log out</button>
                         </form>
                     </li>
+                    {% if user.profile.profile_photo %}
+                        <img src="{{ user.profile.profile_photo.url }}" class="avatar" alt="Аватар">
+                    {% else %}
+                        <img src="{% static 'images/default-avatar.png' %}" class="avatar" alt="Аватар">
+                    {% endif %}
                 </ul>
-                {% if user.profile.profile_photo %}
-                    <img src="{{ user.profile.profile_photo.url }}" class="avatar" alt="Аватар">
-                {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" class="avatar" alt="Аватар">
-                {% endif %}
             {% else %}
                 <ul class="right-content">
                     <li><a href="{% url 'login' %}">log in</a></li>
