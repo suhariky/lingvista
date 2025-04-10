@@ -1,0 +1,25 @@
+.title{
+    margin: 0;
+    text-align: center;
+    padding: 10px 0;
+    font-size: x-large;
+}
+
+.lesson-card > p, .lesson-card > h3{
+    margin: 5px 0;
+}
+
+.lesson-card{
+    margin: 30px 0;
+}
+
+.lessons-container{
+    margin: 0 20px;
+}
+
+.lesson-button{
+    color: white;
+    background-color: rgba(109, 158, 163, 1);
+    padding: 5px 9px;
+    border-radius: 15px;
+}
