@@ -11,8 +11,14 @@ def custom_logout(request):
     logout(request)
     return redirect('main_page')
 
+
 def main_page(request):
     return render(request, 'html/pages/main_page.html')
+
+
+def policy_view(request):
+    return render(request, 'html/pages/policy_page.html')
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -25,6 +31,7 @@ def login_view(request):
         else:
             messages.error(request, 'Неверные имя пользователя или пароль')
     return render(request, 'html/pages/login_page.html')
+
 
 def register_view(request):
     if request.method == 'POST':
