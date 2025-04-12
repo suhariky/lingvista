@@ -23,4 +23,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/history/', views.profile_history, name='profile_history'),
+    path('policy/', views.policy_view, name='private_policy'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

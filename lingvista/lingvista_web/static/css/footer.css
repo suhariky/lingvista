@@ -17,6 +17,11 @@ footer > a {
     color: #F6F6F6;
 }
 
+footer > p {
+    margin-left: auto;
+    color: #F6F6F6;
+}
+
 footer > img {
     padding-left: 20px;
     width: 44px;
