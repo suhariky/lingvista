@@ -12,7 +12,7 @@ header > nav {
 
 .right-content > li {
     display: inline-block;
-    margin: 0 3px;
+    margin: 0 8px;
 }
 
 .right-content > li > a {
@@ -21,6 +21,9 @@ header > nav {
     border-radius: 15px;
     color: #F6F6F6;
     transition: background-color 0.2s;
+    display: inline-block;
+    line-height: 1;
+    text-decoration: none;
 }
 
 .right-content > li > a:hover {
@@ -38,13 +41,14 @@ header > nav {
 }
 
 .avatar {
+    margin-left: 15px;
     border-radius: 50%;
     vertical-align: middle;
     width: 44px;
     height: 44px;
 }
 
-/* Стили только для кнопки выхода */
+/* Стили для кнопки выхода */
 .logout-btn {
     background-color: #c46d6d;
     padding: 10px 18px;
@@ -53,6 +57,8 @@ header > nav {
     color: #F6F6F6;
     cursor: pointer;
     transition: background-color 0.2s;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .logout-btn:hover {

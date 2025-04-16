@@ -11,7 +11,7 @@
                     <li><a href="{% url 'langlevel' %}">tasks</a></li>
                     <li><a href="{% url 'profile_view' %}">profile</a></li>
                     <li>
-                        <form action="{% url 'logout' %}" method="post">
+                        <form action="{% url 'logout' %}" method="post" class="logout-form">
                             {% csrf_token %}
                             <button type="submit" class="logout-btn">log out</button>
                         </form>

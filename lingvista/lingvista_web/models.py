@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 
 class Audio(models.Model):
-    title = models.CharField(max_length=255, blank=True, null=True)  # Название аудио
-    audio_file = models.FileField(upload_to='audio/', blank=True, null=True)  # Файл аудио
-    audio_url = models.URLField(blank=True, null=True)  # Ссылка на аудио
-    description = models.TextField(blank=True, null=True)  # Описание (необязательно)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    audio_file = models.FileField(upload_to='audio/', blank=True, null=True)
+    audio_url = models.URLField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title or "Audio"
@@ -76,7 +76,6 @@ class Profile(models.Model):
 
 
 class LanguageLevel(models.Model):
-    #список кортежей из значений, которые будут в БД и которые будут отображаться на странице
     LEVEL_CHOICES = [
         ('A1', 'A1'),
         ('A2', 'A2'),

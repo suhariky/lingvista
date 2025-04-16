@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm
-from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
+from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress, Audio
 from django.views.decorators.http import require_POST
 
 @require_POST
@@ -40,8 +40,8 @@ def register_view(request):
             user = form.save()
             Profile.objects.create(user=user)
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно.')
-            return redirect('main_page')  # Исправлен редирект
+            messages.success(request, 'Регистрация прошла успешно!')
+            return redirect('main_page')
     else:
         form = UserRegistrationForm()
     return render(request, 'html/pages/registry_page.html', {'form': form})
@@ -259,7 +259,7 @@ def edit_profile(request):
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Профиль обновлён.')
+            messages.success(request, 'Профиль успешно обновлён!')
             return redirect('profile_view')
     else:
         form = ProfileEditForm(instance=profile)
