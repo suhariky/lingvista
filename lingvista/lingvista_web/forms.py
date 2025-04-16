@@ -8,10 +8,37 @@ class ProfileEditForm(forms.ModelForm):
         model = Profile
         fields = ['profile_photo', 'streak', 'completed_levels', 'language_level', 'achievements']
 
-class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+class CustomUserRegistrationForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Ваш Email'
+        })
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Имя пользователя'
+        })
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Пароль'
+        })
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Повторите пароль'
+        })
+    )
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
-

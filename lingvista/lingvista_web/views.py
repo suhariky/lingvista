@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, ProfileEditForm
-from .models import Profile, LanguageLevel, Lesson, Task
 from django.views.decorators.http import require_POST
+from .forms import CustomUserRegistrationForm, ProfileEditForm
+from .models import Profile, LanguageLevel, Lesson, Task, Audio
 
 @require_POST
 def custom_logout(request):
@@ -28,18 +28,18 @@ def login_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = CustomUserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно.')
-            return redirect('main_page')  # Исправлен редирект
+            messages.success(request, 'Регистрация прошла успешно!')
+            return redirect('main_page')
     else:
-        form = UserRegistrationForm()
+        form = CustomUserRegistrationForm()
     return render(request, 'html/pages/registry_page.html', {'form': form})
 
-#@login_required
+@login_required
 def tasks_view(request, level, lesson):
     language_level = get_object_or_404(LanguageLevel, level=level.upper())
     lesson_obj = get_object_or_404(Lesson, language_level=language_level, lesson_number=lesson)
@@ -52,9 +52,8 @@ def tasks_view(request, level, lesson):
         for task in tasks:
             user_answer = None
             is_correct = False
-            correct_answer_display = task.correct_answer  # Для отображения пользователю
+            correct_answer_display = task.correct_answer
 
-            # Для вопросов с вариантами ответов
             if task.option1 or task.option2 or task.option3:
                 correct_answer = [
                     task.option1,
@@ -62,24 +61,10 @@ def tasks_view(request, level, lesson):
                     task.option3
                 ][int(task.correct_answer)-1]
                 user_answer = request.POST.get(f'task_{task.id}')
-                print(
-                    "\n", user_answer,
-                    "\n", task.correct_answer,
-                    "\n", task.option1,
-                    "\n", task.option2,
-                    "\n", task.option3,
-                    "\n", user_answer == task.option1 == task.correct_answer,
-                    "\n", user_answer == task.option2 == task.correct_answer,
-                    "\n", user_answer == task.option3 == task.correct_answer,
-                )
-                # Вариант 1: если correct_answer хранит значение (текст варианта)
                 is_correct = user_answer == correct_answer
 
-            # Для аудио-вопросов
             elif task.audio:
                 user_answer = request.POST.get(f'audio_answer_{task.id}', '').strip()
-                print(user_answer)
-                # Удаляем лишние пробелы и приводим к нижнему регистру
                 normalized_user_answer = ' '.join(user_answer.split()).lower()
                 normalized_correct = ' '.join(task.correct_answer.split()).lower()
                 is_correct = normalized_user_answer == normalized_correct
@@ -130,10 +115,6 @@ def langlevel_view(request):
     return render(request, 'html/pages/langlevel_page.html')
 
 @login_required
-def accountedit_view(request):
-    return render(request, 'html/pages/accountedit_page.html')
-
-@login_required
 def lessons_view(request, level):
     context = {
         'level': level.upper(),
@@ -155,7 +136,7 @@ def edit_profile(request):
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Профиль обновлён.')
+            messages.success(request, 'Профиль успешно обновлён!')
             return redirect('profile')
     else:
         form = ProfileEditForm(instance=profile)

@@ -1,19 +1,71 @@
-body {
-    margin: 0;
+.registration-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    border-radius: 12px;
+    font-family: 'Arial', sans-serif;
 }
 
-footer {
-    background-color: #222325;
+.reg-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
     width: 100%;
-    padding: 30px 0;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #FFFFFF;
 }
 
-footer > a {
-    color: #F6F6F6;
-    margin-right: 10px;
+.form-input::placeholder {
+    color: #FFFFFF;
 }
 
-footer > img {
-    padding-left: 20px;
-    margin-right: 30px;
+
+.btn-register {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 14px 40px; /* Увеличим горизонтальные отступы */
+    border-radius: 8px;
+    font-size: 16px;
+    background: #3498db;
+    color: white;
+}
+
+.btn-register:active {
+    transform: translateY(0);
+}
+
+.errorlist {
+    color: #e74c3c;
+    margin: 8px 0 0 0;
+    font-size: 0.9rem;
+    list-style: none;
+    padding-left: 15px;
+    position: relative;
+}
+
+
+
 }

@@ -3,10 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Audio(models.Model):
-    title = models.CharField(max_length=255, blank=True, null=True)  # Название аудио
-    audio_file = models.FileField(upload_to='audio/', blank=True, null=True)  # Файл аудио
-    audio_url = models.URLField(blank=True, null=True)  # Ссылка на аудио
-    description = models.TextField(blank=True, null=True)  # Описание (необязательно)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    audio_file = models.FileField(upload_to='audio/', blank=True, null=True)
+    audio_url = models.URLField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title or "Audio"
@@ -41,27 +41,23 @@ class Profile(models.Model):
             self.achievements = achievement
         self.save()
 
-
 class CustomUser(AbstractUser):
     nickname = models.CharField(max_length=255, unique=True, blank=True, null=True)
     email = models.EmailField(unique=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
-    # Указываем уникальные related_name для groups и user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
         blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="customuser_groups",  # Уникальное имя для обратной ссылки
+        related_name="customuser_groups",
         related_query_name="customuser",
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
         blank=True,
-        help_text='Specific permissions for this user.',
-        related_name="customuser_permissions",  # Уникальное имя для обратной ссылки
+        related_name="customuser_permissions",
         related_query_name="customuser",
     )
 
@@ -69,7 +65,6 @@ class CustomUser(AbstractUser):
         return self.nickname if self.nickname else self.username
 
 class LanguageLevel(models.Model):
-    #список кортежей из значений, которые будут в БД и которые будут отображаться на странице
     LEVEL_CHOICES = [
         ('A1', 'A1'),
         ('A2', 'A2'),

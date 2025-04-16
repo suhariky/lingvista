@@ -1,47 +1,73 @@
-/* lingvista_web/static/css/login.css */
-
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.4rem;
-    color: #34495e;
-    font-size: 0.9em;
+/* Основной контейнер формы (без белого фона и тени) */
+.registration-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    border-radius: 12px;
+    color: #FFFFFF
+    font-family: 'Arial', sans-serif;
 }
 
-.form-control {
-    width: 40%;
-    padding: 0.6rem;
-    border: 2px solid #ecf0f1;
-    border-radius: 6px;
-    font-size: 0.9em;
-    transition: border-color 0.3s ease;
+.reg-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.form-control:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-/* Округление кнопки */
-.btn-primary {
-    background: #3498db;
-    border: none;
-    padding: 0.8rem;
-    border-radius: 3px;  /* Сильно увеличенный радиус */
-    font-size: 0.95em;
+.form-group {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
     transition: all 0.3s ease;
-    margin-top: 1.2rem;   /* Добавлен отступ сверху */
+    background: #f8f9fa;
 }
 
-.btn-primary:hover {
-    background: #2980b9;
+.form-input::placeholder {
+    color: #FFFFFF;
 }
 
-.mt-3 {
-    margin-top: 1.2rem !important;
+
+.btn-register {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 14px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #3498db;
+    color: black;
 }
 
-/* Дополнительный отступ для нижнего поля ввода */
-.form-group:last-child {
-    margin-bottom: 1.5rem;  /* Увеличенный отступ */
+.btn-register:active {
+    transform: translateY(0);
+}
+
+.errorlist {
+    color: #e74c3c;
+    margin: 8px 0 0 0;
+    font-size: 0.9rem;
+    list-style: none;
+    padding-left: 15px;
+    position: relative;
+}
+
+
+
 }
