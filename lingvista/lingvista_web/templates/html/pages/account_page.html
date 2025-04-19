@@ -7,14 +7,13 @@
 {% block content %}
 <div class="profile-container-centered">
     <div class="profile-header">
-        {% if profile.profile_photo %}
-            <div class="profile-photo">
+        <div class="profile-photo">
+            {% if profile.profile_photo %}
                 <img src="{{ profile.profile_photo.url }}" alt="Фото профиля">
-            </div>
-        {% else %}
-            <div class="profile-photo empty-profile-photo"></div>
-        {% endif %}
-
+            {% else %}
+                <img src="{% static 'images/avatar.png' %}" class="avatar" alt="Аватар">
+            {% endif %}
+        </div>
         <div class="user-basic-info">
             <p><strong>Имя:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>

@@ -19,7 +19,7 @@
                     {% if user.profile.profile_photo %}
                         <img src="{{ user.profile.profile_photo.url }}" class="avatar" alt="Аватар">
                     {% else %}
-                        <img src="{% static 'images/default-avatar.png' %}" class="avatar" alt="Аватар">
+                        <img src="{% static 'images/avatar.png' %}" class="avatar" alt="Аватар">
                     {% endif %}
                 </ul>
             {% else %}

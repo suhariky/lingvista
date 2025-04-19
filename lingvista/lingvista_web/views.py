@@ -134,7 +134,6 @@ def tasks_view(request, level, lesson):
                     ).exists():
                         messages.info(request, f'Поздравляем! Вам открыт уровень {next_level}!')
 
-
         # Сохраняем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
             user=request.user,
@@ -240,6 +239,7 @@ def lessons_view(request, level):
     }
     return render(request, 'html/pages/lessons_page.html', context)
 
+
 @login_required
 def profile(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
@@ -249,6 +249,7 @@ def profile(request):
         'profile': profile,
         'task_progress': task_progress,
     })
+
 
 @login_required
 def edit_profile(request):
@@ -264,6 +265,7 @@ def edit_profile(request):
         form = ProfileEditForm(instance=profile)
 
     return render(request, 'html/pages/accountedit_page.html', {'form': form})
+
 
 @login_required
 def profile_history(request):
