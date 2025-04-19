@@ -1,11 +1,69 @@
-{% extends 'html/pages/base.html' %}
-{% block title %}Регистрация{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="/static/css/authorization.css">{% endblock extra_css%}
-{% block content %}
-  <form method="post">
-    <h2>Registration</h2>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Register</button>
-  </form>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/login_page.css' %}">
+  <title>Sign in</title>
+</head>
+<body>
+  <main>
+    <a href="/" class="logo-link">
+        <img src="{% static 'images/logo.png' %}" alt="LOGO" class="logo-img">
+    </a>
+    <div class="registration-container">
+        <h2 class="reg-title">Registration</h2>
+        <form method="post" class="registration-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password1.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password2.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-register">Sign in</button>
+        </form>
+    </div>
+  </main>
+</body>
+</html>

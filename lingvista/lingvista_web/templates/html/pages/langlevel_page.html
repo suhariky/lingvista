@@ -4,7 +4,7 @@
 {% block extra_css %}<link rel="stylesheet" href="/static/css/langlevel_page.css">{% endblock extra_css%}
 
 {% block content %}
-    <h1>Выберите уровень языка:</h1>
+    <h1>Select language level</h1>
     <div class="links-block">
         {% for level_data in levels_data %}
         <div class="link-section {% if not level_data.is_unlocked %}locked-level{% endif %} {% if level_data.is_completed %}completed-level{% endif %}">
