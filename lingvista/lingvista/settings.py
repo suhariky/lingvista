@@ -26,7 +26,18 @@ SECRET_KEY = 'django-insecure-p0u=n)iacsx@=32z-2e@w7gbt-$*_ljfwpyj-t*@nlk^=#tw)a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['lingvista.onrender.com']
+# For Render.com deployment
+ALLOWED_HOSTS = ['lingvista.onrender.com', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://lingvista.onrender.com',
+    # Add other domains if needed
+]
+
+# If you're using HTTPS (which Render does)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 
 # Application definition
