@@ -15,30 +15,49 @@ class ProfileEditForm(forms.ModelForm):
         self.fields['language_level'].widget.attrs.update({'placeholder': 'Введите уровень языка'})
 
 
+class UserLogInForm(UserCreationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Username'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Password'
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+
+
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Ваш Email'
+            'placeholder': 'Your Email'
         })
     )
     username = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Имя пользователя'
+            'placeholder': 'Username'
         })
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Пароль'
+            'placeholder': 'Password'
         })
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
-            'placeholder': 'Повторите пароль'
+            'placeholder': 'Password confirmation'
         })
     )
 

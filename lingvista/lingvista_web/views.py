@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, ProfileEditForm
-from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress, Audio
+from .forms import UserRegistrationForm, ProfileEditForm, UserLogInForm
+from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
 from django.views.decorators.http import require_POST
+
 
 @require_POST
 def custom_logout(request):
@@ -29,8 +30,9 @@ def login_view(request):
             login(request, user)
             return redirect('main_page')
         else:
-            messages.error(request, 'Неверные имя пользователя или пароль')
-    return render(request, 'html/pages/login_page.html')
+            messages.error(request, 'Invalid username or password')
+    form = UserLogInForm(request.POST if request.method == 'POST' else None)
+    return render(request, 'html/pages/login_page.html', {'form': form})
 
 
 def register_view(request):
@@ -40,7 +42,7 @@ def register_view(request):
             user = form.save()
             Profile.objects.create(user=user)
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно!')
+            messages.success(request, 'Registration is successful!')
             return redirect('main_page')
     else:
         form = UserRegistrationForm()
@@ -58,17 +60,15 @@ def tasks_view(request, level, lesson):
     ).first()
 
     if progress:
-        messages.warning(request, 'Вы уже прошли этот урок на 100%!')
+        messages.warning(request, 'You have already passed this lesson 100%!!')
         return redirect('lessons', level=level)
 
-    # Остальной код представления остается без изменений
     language_level = get_object_or_404(LanguageLevel, level=level.upper())
     lesson_obj = get_object_or_404(Lesson, language_level=language_level, lesson_number=lesson)
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
 
-        # Проверяем, не пройден ли уже урок
         existing_progress = UserTasksProgress.objects.filter(
             user=request.user,
             level=level.upper(),
@@ -77,7 +77,7 @@ def tasks_view(request, level, lesson):
         ).exists()
 
         if existing_progress:
-            messages.warning(request, 'Вы уже завершили этот урок!')
+            messages.warning(request, 'You have already completed this lesson!')
             return redirect('lessons', level=level)
         task_results = []
         correct_count = 0
@@ -132,7 +132,7 @@ def tasks_view(request, level, lesson):
                             user=request.user,
                             level=next_level
                     ).exists():
-                        messages.info(request, f'Поздравляем! Вам открыт уровень {next_level}!')
+                        messages.info(request, f'Congratulations! Level {next_level} is open to you!')
 
         # Сохраняем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
@@ -259,14 +259,9 @@ def edit_profile(request):
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Профиль успешно обновлён!')
+            messages.success(request, 'The profile has been successfully updated!')
             return redirect('profile_view')
     else:
         form = ProfileEditForm(instance=profile)
 
     return render(request, 'html/pages/accountedit_page.html', {'form': form})
-
-
-@login_required
-def profile_history(request):
-    return render(request, 'html/pages/profile_history.html')
