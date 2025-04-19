@@ -95,9 +95,10 @@
 
             <div class="submit-section">
                 {% if show_answers %}
-                    <a href="{% url 'lessons' level=level %}">
-                        <button class="tasks-button">To lessons</button>
-                    </a>
+                    <div style="margin: 15px;">
+                        <a href="{% url 'lessons' level=level %}" class="tasks-button">To lessons</a>
+                    </div>
+
                 {% else %}
                     <button type="submit" class="tasks-button">Check results</button>
                 {% endif %}

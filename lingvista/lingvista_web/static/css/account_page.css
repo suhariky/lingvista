@@ -38,7 +38,6 @@
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #ccc;
 }
 
 .user-basic-info {
