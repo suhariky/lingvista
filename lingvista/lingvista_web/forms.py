@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Profile
 
 
@@ -15,7 +15,7 @@ class ProfileEditForm(forms.ModelForm):
         self.fields['language_level'].widget.attrs.update({'placeholder': 'Введите уровень языка'})
 
 
-class UserLogInForm(UserCreationForm):
+class UserLogInForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-input',
