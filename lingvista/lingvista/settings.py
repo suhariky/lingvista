@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-p0u=n)iacsx@=32z-2e@w7gbt-$*_ljfwpyj-t*@nlk^=#tw)a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['lingvista.onrender.com']
 
 
 # Application definition
