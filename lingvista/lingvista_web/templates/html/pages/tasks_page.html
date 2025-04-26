@@ -1,6 +1,8 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 
+{% block extra_css %}<link rel="stylesheet" href="/static/css/tasks_page.css">{% endblock extra_css%}
+
 {% block content %}
     <form method="POST">
         {% csrf_token %}

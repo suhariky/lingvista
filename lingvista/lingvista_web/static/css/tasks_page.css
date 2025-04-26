@@ -1,0 +1,55 @@
+.task-question > h3 {
+    margin: 0;
+    text-align: center;
+    padding-top: 15px;
+    font-size: x-large;
+}
+
+.task-question > p{
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.task-card{
+    padding: 0 10px;
+}
+
+.audio-answer-input{
+    margin-top: 10px;
+}
+
+.audio-answer-input > input{
+    margin-left: 10px;
+}
+
+.submit-section > button{
+    margin: 15px 10px;
+    padding: 5px 9px;
+    color: white;
+    background-color: rgba(109, 158, 163, 1);
+    border-radius: 15px;
+}
+
+
+
+.results-summary{
+    padding: 0 10px;
+}
+
+.results-summary > h2 {
+    padding: 15px 0;
+    margin: 0;
+    font-size: x-large;
+}
+
+.results-summary > p{
+    margin: 0;
+}
+
+.correct-answer > p{
+    margin: 0;
+}
+
+.correct-answer{
+    margin: 10px 0;
+}
