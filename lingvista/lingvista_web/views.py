@@ -7,10 +7,11 @@ from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
 from django.views.decorators.http import require_POST
 
 
-@require_POST
-def custom_logout(request):
-    logout(request)
-    return redirect('main_page')
+# @require_POST
+# def custom_logout(request):
+#     logout(request)
+#     return redirect('main_page')
+
 
 
 def main_page(request):
@@ -165,12 +166,14 @@ def tasks_view(request, level, lesson):
 
 @login_required
 def profile_view(request):
+    unlocked_levels = request.user.profile.get_unlocked_levels()
     profile, created = Profile.objects.get_or_create(user=request.user)
     task_progress = UserTasksProgress.objects.filter(user=request.user)
     return render(request, 'html/pages/account_page.html', {
         'user': request.user,
         'profile': profile,
         'task_progress': task_progress,
+        'language_level': unlocked_levels[-1]
     })
 
 
@@ -186,7 +189,6 @@ def langlevel_view(request):
             'is_unlocked': level.level in unlocked_levels,
             'is_completed': check_level_completion(request.user, level.level)
         })
-
     return render(request, 'html/pages/langlevel_page.html', {
         'levels_data': levels_data
     })
@@ -205,9 +207,9 @@ def check_level_completion(user, level):
     return True
 
 
-@login_required
-def accountedit_view(request):
-    return render(request, 'html/pages/accountedit_page.html')
+# @login_required
+# def accountedit_view(request):
+#     return render(request, 'html/pages/accountedit_page.html')
 
 
 @login_required
@@ -240,15 +242,15 @@ def lessons_view(request, level):
     return render(request, 'html/pages/lessons_page.html', context)
 
 
-@login_required
-def profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
-    task_progress = UserTasksProgress.objects.filter(user=request.user)
-    return render(request, 'html/pages/account_page.html', {
-        'user': request.user,
-        'profile': profile,
-        'task_progress': task_progress,
-    })
+# @login_required
+# def profile(request):
+#     profile, created = Profile.objects.get_or_create(user=request.user)
+#     task_progress = UserTasksProgress.objects.filter(user=request.user)
+#     return render(request, 'html/pages/account_page.html', {
+#         'user': request.user,
+#         'profile': profile,
+#         'task_progress': task_progress,
+#     })
 
 
 @login_required
