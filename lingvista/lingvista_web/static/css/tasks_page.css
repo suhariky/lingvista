@@ -53,3 +53,31 @@
 .correct-answer{
     margin: 10px 0;
 }
+
+.container {
+    margin-top: 30px;
+    min-height: 100vh;
+}
+.submit-section{
+    margin-top: 5px;
+}
+
+.tasks-container{
+    margin: 0 20px;
+}
+
+.tasks-button {
+    color: white;
+    background-color: rgba(109, 158, 163, 1);
+    padding: 5px 9px;
+    border-radius: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 20px;
+}
+
+body {
+    background-color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+}
