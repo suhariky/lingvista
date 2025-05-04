@@ -45,15 +45,15 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -fb|--fix-black)
-            AUTO_FIX=true
+            AUTO_FIX_BLACK=true
             shift
             ;;
         -fi|--fix-isort)
-            AUTO_FIX=true
+            AUTO_FIX_ISORT=true
             shift
             ;;
         -fr|--fix-ruff)
-            AUTO_FIX=true
+            AUTO_FIX_RUFF=true
             shift
             ;;
         -v|--verbose)
@@ -71,6 +71,7 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
 
 # Показать помощь и выйти если запрошено
 if [ "$SHOW_HELP" = true ]; then
@@ -104,7 +105,7 @@ run_black() {
 
     echo -e "\n=== Проверка black ==="
 
-    if [ "$AUTO_FIX" = true ] && [ "$AUTO_FIX_BLACK" = true ]; then
+    if [ "$AUTO_FIX" = "true" ] || [ "$AUTO_FIX_BLACK" = "true" ]; then
         log "Автоформатирование..."
         "${fix_cmd[@]}"
     else
@@ -125,7 +126,7 @@ run_isort() {
 
     echo -e "\n=== Проверка isort ==="
 
-    if [ "$AUTO_FIX" = true ] && [ "$AUTO_FIX_ISORT" = true ]; then
+    if [ "$AUTO_FIX" = "true" ] || [ "$AUTO_FIX_ISORT" = "true" ]; then
         log "Автоформатирование..."
         "${fix_cmd[@]}"
     else
@@ -146,7 +147,7 @@ run_ruff() {
 
     echo -e "\n=== Проверка ruff ==="
 
-    if [ "$AUTO_FIX" = true ] && [ "$AUTO_FIX_RUFF" = true ]; then
+    if [ "$AUTO_FIX" = "true" ] || [ "$AUTO_FIX_RUFF" = "true" ]; then
         log "Автоисправление..."
         if ! "${fix_cmd[@]}"; then
             ERRORS+=("ruff: Найдены проблемы, требующие ручного исправления")
