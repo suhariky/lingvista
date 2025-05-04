@@ -18,7 +18,7 @@ detect_distro() {
 # Функция для установки curl и др
 install_dependencies() {
     case $DISTRO in
-        ubuntu|debian|pop|linuxmint)
+        ubuntu|debian|pop|linuxmint|kali)
             echo "Установка зависимостей для Debian-based дистрибутивов..."
             sudo apt update
             sudo apt install -y curl
