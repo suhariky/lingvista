@@ -9,6 +9,13 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_photo', 'streak', 'completed_levels', 'language_level', 'achievements']
+        widgets = {
+            'profile_photo': forms.ClearableFileInput(attrs={'class': 'input-custom'}),
+            'streak': forms.NumberInput(attrs={'class': 'input-custom'}),
+            'completed_levels': forms.NumberInput(attrs={'class': 'input-custom'}),
+            'language_level': forms.TextInput(attrs={'class': 'input-custom'}),
+            'achievements': forms.Textarea(attrs={'class': 'input-custom'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ProfileEditForm, self).__init__(*args, **kwargs)
