@@ -1,39 +1,57 @@
 {% extends 'html/pages/base.html' %}
 {% load static %}
 
-{% block extra_css %}<link rel="stylesheet" href="/static/css/main_page.css">{% endblock extra_css%}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/main_page.css' %}">
+{% endblock extra_css %}
 
 {% block extra_js %}
-    <script src="{% static 'js/logo-interaction.js' %}"></script>
+  <script src="{% static 'js/logo-interaction.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-    <div class="main-screen">
-        <div class="main-screen-content">
-            <div class="slogan">
-                <h1>Lingvista</h1>
-                    <div class="logo-container">
-                        <img
-                            src="{% static 'images/logo.png' %}"
-                            alt="LOGO"
-                            class="logo-img"
-                            id="clickable-logo"
-                            onmouseover="this.src='{% static 'images/owl.png' %}'"
-                            onmouseout="this.src='{% static 'images/logo.png' %}'"
-                        >
-                        <div id="speech-bubble" class="speech-bubble hidden"></div>
-                    </div>
-                <h3>best way of learning</h3>
-            </div>
-            <div class="installation-links-content">
-                <h3>Start learning</h3>
-                <div class="installation-links">
-                    <a href="https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
-                    <a href="https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
-                    <a href="https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
-                    <a href="https://www.icegif.com/wp-content/uploads/2023/01/icegif-162.gif"><img src="{% static 'images/app-store-install.svg' %}" alt="installation-link"></a>
-                </div>
-            </div>
+  <div class="main-screen">
+    <div class="main-screen-content">
+      <div class="slogan">
+        <h1>Lingvista</h1>
+        <div class="logo-container">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="LOGO"
+            class="logo-img"
+            id="clickable-logo"
+            onmouseover="this.src='{% static 'images/owl.png' %}'"
+            onmouseout="this.src='{% static 'images/logo.png' %}'"
+          >
+          <div id="speech-bubble" class="speech-bubble hidden"></div>
         </div>
+        <h3>best way of learning</h3>
+        <h3>Start learning</h3>
+      </div>
     </div>
+  </div>
+
+  <div class="info-block">
+    <div class="info-title">
+      <h2>RUSSIAN ISN'T HARD — IT'S JUST DIFFERENT!</h2>
+    </div>
+    <div class="info-content">
+      <img src="{% static 'images/russian-girls.jpg' %}" alt="Traditional Russian dance">
+      <ul>
+        <li><strong>Different alphabet?</strong><br>33 letters > 26. More symbols, more fun.</li>
+        <li><strong>Different sounds?</strong><br>Rolling ‘r’ is just purring like a cat. You’ll nail it.</li>
+        <li><strong>Different logic?</strong><br>Wait till you hear about English phrasal verbs.</li>
+        <li>If you learned ‘they’re/their/there’, you’ll conquer ‘идти/ходить/ездить’. We guarantee it.</li>
+      </ul>
+    </div>
+    <div class="info-bottom">
+      <h3>The only real mistake? Not starting!<br>Try your first lesson now!</h3>
+      <div class="info-bottom-row">
+        <div class="app-buttons">
+          <a href="#"><img src="{% static 'images/app-store-install.svg' %}" alt="App Store"></a>
+        </div>
+        <a href="#" class="start-button">Start now</a>
+      </div>
+    </div>
+  </div>
 {% endblock %}

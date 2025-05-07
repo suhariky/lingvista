@@ -1,5 +1,13 @@
 {% extends 'html/pages/base.html' %}
+
 {% block title %}Privacy Policy - Russian Learning Platform{% endblock %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/policy_page.css' %}">
+{% endblock %}
+
 {% block content %}
     <section>
         <h1>Privacy Policy</h1>

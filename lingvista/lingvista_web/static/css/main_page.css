@@ -1,3 +1,4 @@
+/* Заголовки */
 h1 {
     font-size: 130px;
     margin-bottom: 15px;
@@ -16,8 +17,10 @@ h3 {
     margin-right: 6px;
 }
 
-.slogan{
-    margin-bottom: 75px;
+.slogan {
+/*    margin-bottom: 75px; */
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .main-screen {
@@ -35,9 +38,15 @@ h3 {
     text-align: center;
 }
 
+/* Логотип и пузырь */
 .logo-container {
     position: relative;
     display: inline-block;
+}
+
+.logo-img {
+    width: 150px;
+    height: auto;
 }
 
 .speech-bubble {
@@ -107,4 +116,101 @@ h3 {
 .logo-img {
     width: 150px;
     height: auto;
+}
+
+.info-block {
+    background-color: #B4D3D3;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+    text-align: left;
+}
+
+.info-content img {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.info-content ul {
+    list-style: none;
+    padding: 0;
+    color: #375356;
+    font-size: 26px;
+    text-align: left;
+}
+
+.info-content ul li {
+    margin-bottom: 15px;
+}
+
+
+.info-bottom h3 {
+    color: #000;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.app-buttons {
+    margin-bottom: 20px;
+}
+
+.app-buttons img {
+    width: 150px;
+    height: auto;
+}
+
+.start-button {
+    display: inline-block;
+    background-color: #5C9A9A;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.start-button:hover {
+    background-color: #3e7777;
+}
+
+.info-content ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2b3e42;
+  line-height: 1.6;
+}
+
+.info-content ul li {
+  margin-bottom: 12px;
+}
+
+.info-title h2{
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #2b3e42;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.info-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 15px;
 }
