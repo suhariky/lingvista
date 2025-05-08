@@ -1,17 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, ProfileEditForm, UserLogInForm
-from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
-from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import ProfileEditForm, UserLogInForm, UserRegistrationForm
+from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
 
 # @require_POST
 # def custom_logout(request):
 #     logout(request)
 #     return redirect('main_page')
-
 
 
 def main_page(request):
@@ -54,10 +52,7 @@ def register_view(request):
 def tasks_view(request, level, lesson):
     # Проверяем, не пройден ли уже урок на 100%
     progress = UserTasksProgress.objects.filter(
-        user=request.user,
-        level=level.upper(),
-        lesson=lesson,
-        result=100
+        user=request.user, level=level.upper(), lesson=lesson, result=100
     ).first()
 
     if progress:
@@ -71,10 +66,7 @@ def tasks_view(request, level, lesson):
     if request.method == 'POST':
 
         existing_progress = UserTasksProgress.objects.filter(
-            user=request.user,
-            level=level.upper(),
-            lesson=lesson,
-            result=100
+            user=request.user, level=level.upper(), lesson=lesson, result=100
         ).exists()
 
         if existing_progress:
@@ -86,14 +78,9 @@ def tasks_view(request, level, lesson):
         for task in tasks:
             user_answer = None
             is_correct = False
-            correct_answer_display = task.correct_answer
 
             if task.option1 or task.option2 or task.option3:
-                correct_answer = [
-                    task.option1,
-                    task.option2,
-                    task.option3
-                ][int(task.correct_answer) - 1]
+                correct_answer = [task.option1, task.option2, task.option3][int(task.correct_answer) - 1]
                 user_answer = request.POST.get(f'task_{task.id}')
                 is_correct = user_answer == correct_answer
 
@@ -106,17 +93,19 @@ def tasks_view(request, level, lesson):
             if is_correct:
                 correct_count += 1
 
-            task_results.append({
-                'user_answer': user_answer,
-                'is_correct': is_correct,
-                "id": task.id,
-                'question': task.question,
-                'correct_answer': task.correct_answer,
-                'option1': task.option1,
-                'option2': task.option2,
-                'option3': task.option3,
-                'audio': task.audio,
-            })
+            task_results.append(
+                {
+                    'user_answer': user_answer,
+                    'is_correct': is_correct,
+                    "id": task.id,
+                    'question': task.question,
+                    'correct_answer': task.correct_answer,
+                    'option1': task.option1,
+                    'option2': task.option2,
+                    'option3': task.option3,
+                    'audio': task.audio,
+                }
+            )
 
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
 
@@ -129,18 +118,12 @@ def tasks_view(request, level, lesson):
                 if index < len(level_order) - 1:
                     next_level = level_order[index + 1]
                     # Проверяем, что следующий уровень еще не открыт
-                    if not UserTasksProgress.objects.filter(
-                            user=request.user,
-                            level=next_level
-                    ).exists():
+                    if not UserTasksProgress.objects.filter(user=request.user, level=next_level).exists():
                         messages.info(request, f'Congratulations! Level {next_level} is open to you!')
 
         # Сохраняем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
-            user=request.user,
-            level=level.upper(),
-            lesson=lesson,
-            defaults={'result': score}
+            user=request.user, level=level.upper(), lesson=lesson, defaults={'result': score}
         )
 
         context = {
@@ -154,13 +137,7 @@ def tasks_view(request, level, lesson):
         }
         return render(request, 'html/pages/tasks_page.html', context)
 
-    context = {
-        'level': level,
-        'lesson': lesson,
-        'tasks': tasks,
-        'show_answers': False,
-        'lesson_obj': lesson_obj
-    }
+    context = {'level': level, 'lesson': lesson, 'tasks': tasks, 'show_answers': False, 'lesson_obj': lesson_obj}
     return render(request, 'html/pages/tasks_page.html', context)
 
 
@@ -169,12 +146,16 @@ def profile_view(request):
     unlocked_levels = request.user.profile.get_unlocked_levels()
     profile, created = Profile.objects.get_or_create(user=request.user)
     task_progress = UserTasksProgress.objects.filter(user=request.user)
-    return render(request, 'html/pages/account_page.html', {
-        'user': request.user,
-        'profile': profile,
-        'task_progress': task_progress,
-        'language_level': unlocked_levels[-1]
-    })
+    return render(
+        request,
+        'html/pages/account_page.html',
+        {
+            'user': request.user,
+            'profile': profile,
+            'task_progress': task_progress,
+            'language_level': unlocked_levels[-1],
+        },
+    )
 
 
 @login_required
@@ -184,24 +165,20 @@ def langlevel_view(request):
 
     levels_data = []
     for level in all_levels:
-        levels_data.append({
-            'level': level,
-            'is_unlocked': level.level in unlocked_levels,
-            'is_completed': check_level_completion(request.user, level.level)
-        })
-    return render(request, 'html/pages/langlevel_page.html', {
-        'levels_data': levels_data
-    })
+        levels_data.append(
+            {
+                'level': level,
+                'is_unlocked': level.level in unlocked_levels,
+                'is_completed': check_level_completion(request.user, level.level),
+            }
+        )
+    return render(request, 'html/pages/langlevel_page.html', {'levels_data': levels_data})
 
 
 def check_level_completion(user, level):
     lessons = Lesson.objects.filter(language_level__level=level)
     for lesson in lessons:
-        progress = UserTasksProgress.objects.filter(
-            user=user,
-            level=level,
-            lesson=lesson.lesson_number
-        ).first()
+        progress = UserTasksProgress.objects.filter(user=user, level=level, lesson=lesson.lesson_number).first()
         if not progress or progress.result < 100:
             return False
     return True
@@ -218,10 +195,7 @@ def lessons_view(request, level):
     lessons = Lesson.objects.filter(language_level__level=level.upper()).order_by('lesson_number')
 
     # Получаем прогресс пользователя по этим урокам
-    user_progress = UserTasksProgress.objects.filter(
-        user=request.user,
-        level=level.upper()
-    )
+    user_progress = UserTasksProgress.objects.filter(user=request.user, level=level.upper())
 
     # Создаем список уроков с информацией о доступности
     lessons_data = []
@@ -229,11 +203,9 @@ def lessons_view(request, level):
         progress = user_progress.filter(lesson=lesson.lesson_number).first()
         is_completed = progress and progress.result == 100
 
-        lessons_data.append({
-            'lesson': lesson,
-            'is_completed': is_completed,
-            'score': progress.result if progress else 0
-        })
+        lessons_data.append(
+            {'lesson': lesson, 'is_completed': is_completed, 'score': progress.result if progress else 0}
+        )
 
     context = {
         'level': level.upper(),

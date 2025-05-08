@@ -1,6 +1,5 @@
-from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Audio(models.Model):
@@ -38,9 +37,7 @@ class Profile(models.Model):
 
             for lesson in lessons:
                 progress = UserTasksProgress.objects.filter(
-                    user=self.user,
-                    level=current_level,
-                    lesson=lesson.lesson_number
+                    user=self.user, level=current_level, lesson=lesson.lesson_number
                 ).first()
 
                 if not progress or progress.result < 70:
