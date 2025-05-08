@@ -126,4 +126,4 @@ class UserTasksProgress(models.Model):
         unique_together = ('user', 'level', 'lesson')
 
     def __str__(self):
-        return f"{self.user.username} - Level {self.level} - Lesson {self.lesson} - Result {self.result}%"
+        return f"{self.user.name} - Level {self.level} - Lesson {self.lesson} - Result {self.result}%"
