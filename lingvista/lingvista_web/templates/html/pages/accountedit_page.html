@@ -1,30 +1,75 @@
 {% extends 'html/pages/base.html' %}
-{% block title %}Редактировать профиль{% endblock %}
+
+{% block title %}Edit profile{% endblock %}
+
 {% block extra_css %}
+
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/accountedit_page.css' %}">
 {% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/change-avatar.js' %}"></script>
+{% endblock %}
+
 
 {% block content %}
 <div class="profile-edit-wrapper">
   <div class="form-column">
     <h2 class="title-left">Profile edit</h2>
+
+    <!-- Форма смены аватарки -->
+    <h3 class="section-title">Change Avatar</h3>
     <div class="avatar-row">
-      <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="avatar">
-      <button type="button" class="btn-edit">edit</button>
+    {% if profile_form.instance.profile_photo %}
+      <img src="{{ profile_form.instance.profile_photo.url }}"
+           alt="Avatar"
+           class="profile-avatar">
+    {% else %}
+      <img src="{% static 'images/avatar.png' %}"
+           alt="Avatar"
+           class="profile-avatar">
+    {% endif %}
     </div>
+
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" class="input-custom" required>
+        {{ profile_form.profile_photo }}
+      </div>
+      <button type="submit" name="profile_submit" class="btn-save">Update Photo</button>
+    </form>
+
+    <!-- Форма смены email -->
+    <h3 class="section-title">Change Email</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ email_form.email.label_tag }}
+        {{ email_form.email }}
+      </div>
+      <button type="submit" name="email_submit" class="btn-save">Update Email</button>
+    </form>
+
+    <!-- Форма смены пароля -->
+    <h3 class="section-title">Change Password</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ password_form.old_password.label_tag }}
+        {{ password_form.old_password }}
       </div>
       <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" class="input-custom" required>
+        {{ password_form.new_password1.label_tag }}
+        {{ password_form.new_password1 }}
       </div>
-      <button type="submit" class="btn-save">save changes</button>
+      <div class="form-group">
+        {{ password_form.new_password2.label_tag }}
+        {{ password_form.new_password2 }}
+      </div>
+      <button type="submit" name="password_submit" class="btn-save">Update Password</button>
     </form>
+
   </div>
 </div>
 {% endblock %}

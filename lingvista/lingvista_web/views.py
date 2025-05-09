@@ -1,15 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ProfileEditForm, UserLogInForm, UserRegistrationForm
+from .forms import ProfileEditForm, UserLogInForm, UserRegistrationForm, EmailChangeForm, CustomPasswordChangeForm
 from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
-
-# @require_POST
-# def custom_logout(request):
-#     logout(request)
-#     return redirect('main_page')
 
 
 def main_page(request):
@@ -214,28 +209,39 @@ def lessons_view(request, level):
     return render(request, 'html/pages/lessons_page.html', context)
 
 
-# @login_required
-# def profile(request):
-#     profile, created = Profile.objects.get_or_create(user=request.user)
-#     task_progress = UserTasksProgress.objects.filter(user=request.user)
-#     return render(request, 'html/pages/account_page.html', {
-#         'user': request.user,
-#         'profile': profile,
-#         'task_progress': task_progress,
-#     })
-
-
 @login_required
 def edit_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile = request.user.profile
 
     if request.method == 'POST':
-        form = ProfileEditForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The profile has been successfully updated!')
-            return redirect('profile_view')
-    else:
-        form = ProfileEditForm(instance=profile)
+        profile_form = ProfileEditForm(request.POST, request.FILES, instance=profile)
+        email_form = EmailChangeForm(request.POST)
+        password_form = CustomPasswordChangeForm(request.user, request.POST)
 
-    return render(request, 'html/pages/accountedit_page.html', {'form': form})
+        if 'profile_submit' in request.POST and profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile picture has been updated!')
+            return redirect('edit_profile')
+
+        if 'email_submit' in request.POST and email_form.is_valid():
+            new_email = email_form.cleaned_data['email']
+            request.user.email = new_email
+            request.user.save()
+            messages.success(request, 'Your email has been updated!')
+            return redirect('edit_profile')
+
+        if 'password_submit' in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Важно, чтобы пользователь не разлогинился
+            messages.success(request, 'Your password has been updated!')
+            return redirect('edit_profile')
+    else:
+        profile_form = ProfileEditForm(instance=profile)
+        email_form = EmailChangeForm(initial={'email': request.user.email})
+        password_form = CustomPasswordChangeForm(request.user)
+
+    return render(request, 'html/pages/accountedit_page.html', {
+        'profile_form': profile_form,
+        'email_form': email_form,
+        'password_form': password_form,
+    })

@@ -41,12 +41,20 @@ body {
     margin-bottom: 30px;
 }
 
-.avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #ccc;
+/* Стили для контейнера аватара */
+.avatar-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Стили для самой аватарки */
+.profile-avatar {
+    width: 200px;       /* Нужный вам размер */
+    height: 200px;      /* Сохраняем пропорции */
+    border-radius: 50%;  /* Круглая форма */
+    object-fit: cover;   /* Чтобы изображение заполняло область */
+    border: 3px solid #6D9EA3; /* Красивая рамка */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
 }
 
 .btn-edit {
@@ -107,3 +115,53 @@ label {
     border: none;
     border-radius: 15px;
     cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+}
+.section-title {
+    font-size: 20px;
+    margin: 30px 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+/* Стили для кастомного файлового поля */
+.custom-file-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.custom-file-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #6D9EA3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    width: fit-content;
+}
+
+.custom-file-button:hover {
+    background: #5c8d91;
+}
+
+.hidden-file-input {
+    display: none !important;
+}
+
+.custom-file-name {
+    font-style: italic;
+    color: #666;
+}
+
+.file-clear {
+    margin-top: 5px;
+}

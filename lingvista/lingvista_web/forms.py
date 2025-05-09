@@ -1,26 +1,32 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 from .models import Profile
+from .widgets import CustomClearableFileInput
 
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_photo', 'streak', 'completed_levels', 'language_level', 'achievements']
+        fields = ['profile_photo']
         widgets = {
-            'profile_photo': forms.ClearableFileInput(attrs={'class': 'input-custom'}),
-            'streak': forms.NumberInput(attrs={'class': 'input-custom'}),
-            'completed_levels': forms.NumberInput(attrs={'class': 'input-custom'}),
-            'language_level': forms.TextInput(attrs={'class': 'input-custom'}),
-            'achievements': forms.Textarea(attrs={'class': 'input-custom'}),
+            'profile_photo': CustomClearableFileInput(attrs={'class': 'input-custom'}),
         }
 
+
+class EmailChangeForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'input-custom'}),
+        label="New Email"
+    )
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
-        super(ProfileEditForm, self).__init__(*args, **kwargs)
-        self.fields['achievements'].widget.attrs.update({'placeholder': 'Введите достижения'})
-        self.fields['language_level'].widget.attrs.update({'placeholder': 'Введите уровень языка'})
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'input-custom'})
 
 
 class UserLogInForm(AuthenticationForm):
