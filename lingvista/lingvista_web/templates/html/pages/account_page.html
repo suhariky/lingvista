@@ -36,7 +36,7 @@
                     <label><strong>Lesson:</strong> {{ progress.level }}-{{ progress.lesson }}</label>
                 </div>
                 <div class="status-item">
-                    <label><strong>Status:</strong> {% if progress.result == 100 %}✔️ {% else %}✖️ {% endif %} {{ progress.result }}%</label>
+                    <label><strong>Status:</strong> {% if progress.result == 100 %}✔️ {% else %}❌️ {% endif %} {{ progress.result }}%</label>
                 </div>
                 <div class="date-item">
                     <label><strong>Date:</strong> {% if progress.date_completed %}{{ progress.date_completed|date:"d.m.Y H:i" }}{% else %}-{% endif %}</label>
