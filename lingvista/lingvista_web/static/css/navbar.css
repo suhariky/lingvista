@@ -46,6 +46,7 @@ header > nav {
     vertical-align: middle;
     width: 44px;
     height: 44px;
+    object-fit: cover;
 }
 
 /* Стили для кнопки выхода */

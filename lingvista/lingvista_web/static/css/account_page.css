@@ -9,7 +9,7 @@
     background-color: #A2C1C3;
     transition: background-color 0.2s;
     cursor: pointer;
-    color: #1e1e1e;
+    color: #F6F6F6;
     text-decoration: none;
     border-radius: 15px;
     width: 200px;
@@ -74,7 +74,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #ccc; /* Серый фон */
+    background-color: #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,27 +88,19 @@
     color: #777;
 }
 
-.button-container {
+.button-container.right-button {
     display: flex;
-    justify-content: flex-start;
-    margin-top: 15px;
-    padding-left: 10px;
+    justify-content: flex-end;
+    padding-right: 10px;
 }
 
-.stats-title {
-    font-size: 22px;
+.centered-title {
+    text-align: center;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
-.stats-box {
-    background-color: #1e1e1e;
-    color: white;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 8px;
-    text-align: left;
-}
 
 .task-progress-box {
     background-color: #1e1e1e;
@@ -147,9 +139,13 @@
     margin: 5px 0;
 }
 
-.stats-box > p, .task-progress-box > p {
-    margin: 15px 0;
+.profile-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
 }
+
 
 .task-progress-item {
     margin: 15px 0;

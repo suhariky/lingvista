@@ -1,0 +1,20 @@
+<div class="custom-file-wrapper">
+    <!-- Кастомная кнопка вместо стандартной -->
+    <label for="{{ widget.attrs.id }}" class="custom-file-button">
+        {{ widget.input_text }}
+    </label>
+
+    <!-- Скрытый оригинальный input -->
+    <input type="{{ widget.type }}"
+           name="{{ widget.name }}"
+           id="{{ widget.attrs.id }}"
+           class="hidden-file-input"
+           {% include "django/forms/widgets/attrs.html" %}>
+
+    {% if widget.is_initial %}
+    <div class="file-clear">
+        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}">
+        <label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>
+    </div>
+    {% endif %}
+</div>
