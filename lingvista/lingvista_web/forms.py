@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.models import User
 
 from .models import Profile
@@ -16,10 +16,7 @@ class ProfileEditForm(forms.ModelForm):
 
 
 class EmailChangeForm(forms.Form):
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={'class': 'input-custom'}),
-        label="New Email"
-    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'input-custom'}), label="New Email")
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):

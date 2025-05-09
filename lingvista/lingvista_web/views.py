@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ProfileEditForm, UserLogInForm, UserRegistrationForm, EmailChangeForm, CustomPasswordChangeForm
+from .forms import CustomPasswordChangeForm, EmailChangeForm, ProfileEditForm, UserLogInForm, UserRegistrationForm
 from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
 
 
@@ -240,8 +240,12 @@ def edit_profile(request):
         email_form = EmailChangeForm(initial={'email': request.user.email})
         password_form = CustomPasswordChangeForm(request.user)
 
-    return render(request, 'html/pages/accountedit_page.html', {
-        'profile_form': profile_form,
-        'email_form': email_form,
-        'password_form': password_form,
-    })
+    return render(
+        request,
+        'html/pages/accountedit_page.html',
+        {
+            'profile_form': profile_form,
+            'email_form': email_form,
+            'password_form': password_form,
+        },
+    )
