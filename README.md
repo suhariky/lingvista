@@ -58,7 +58,7 @@ git clone https://gitlab.informatics.ru/2024-2025/vk/s107/lingvista.git lingvist
 ![Рисунок 1-2-1](docs/pictures/1-2-1.png)
 
 <a id="win_install"></a>
-#### Настройка при помощи скриптов
+#### Настройка
 Откройте командную строку в корне репозитория и перейдите в папку scripts\windows
 ```cmd
 cd scripts\windows
@@ -71,6 +71,12 @@ cd scripts\windows
 ```cmd
 .\setup.bat
 ```
+Вернитесь в корень проекта. Скопируйте файл .env.example и переименуйте его в .env
+```cmd
+cd ..\..
+copy .env.example .env
+```
+Заполните актуальные параметры окружения
 
 <a id="win_run"></a>
 #### Запуск
@@ -133,6 +139,14 @@ cd scripts/linux
 ./setup.sh
 ```
 ![Рисунок setup](docs/pictures/setup.png)
+
+Вернитесь в корень проекта. Скопируйте файл .env.example и переименуйте его в .env
+```bash
+cd ../..
+cp .env.example .env
+```
+Заполните актуальные параметры окружения
+
 <a id="linux_run"></a>
 #### Запуск
 - Откройте командную строку в корне репозитория и перейдите в папку scripts/windows

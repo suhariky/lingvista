@@ -49,9 +49,6 @@ class Profile(models.Model):
 
         return levels
 
-    def __str__(self):
-        return self.user.username
-
     def increment_streak(self):
         self.streak += 1
         self.save()

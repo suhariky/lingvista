@@ -1,5 +1,4 @@
-from django.forms import ClearableFileInput
-from django.forms import FileInput
+from django.forms import ClearableFileInput, FileInput
 
 
 class CustomFileInput(FileInput):
@@ -14,5 +13,5 @@ class CustomFileInput(FileInput):
 class CustomClearableFileInput(ClearableFileInput):
     template_name = 'widgets/clearable_file_input_simple.html'
     initial_text = 'Current file'  # Текст о текущем файле
-    input_text = 'Select file'     # Текст кнопки выбора (английский)
+    input_text = 'Select file'  # Текст кнопки выбора (английский)
     clear_checkbox_label = 'Remove'  # Текст чекбокса
