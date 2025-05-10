@@ -65,3 +65,9 @@ header > nav {
 .logout-btn:hover {
     background-color: #c46d6db7;
 }
+
+.logo-navbar {
+    height: 50px;
+    width: auto;
+    vertical-align: middle;
+}
