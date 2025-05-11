@@ -1,0 +1,57 @@
+site_name: lingvista docs
+
+plugins:
+  - search
+  - mermaid2:
+      arguments:
+        theme: 'default'
+        startOnLoad: true
+      suppress_warnings: true
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - "lingvista/lingvista_web"
+
+nav:
+  - Home: index.html
+  - Settings: settings/index.html
+  - Database: database/index.html
+  - Models: models/index.html
+  - Views: views/index.html
+  - URLS: urls/index.html
+  - Forms: forms/index.html
+  - Widgets: widgets/index.html
+
+theme:
+  name: material
+  feature:
+    tabs: true
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/gitlab
+
+extra:
+  social:
+    - icon: fontawesome/brands/gitlab
+      link: https://gitlab.informatics.ru/2024-2025/vk/s107/lingvista
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
