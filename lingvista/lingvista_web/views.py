@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from .check_answer import get_check_strategy
 from .forms import CustomPasswordChangeForm, EmailChangeForm, ProfileEditForm, UserLogInForm, UserRegistrationForm
 from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
 
@@ -45,11 +46,10 @@ def register_view(request):
 
 @login_required
 def tasks_view(request, level, lesson):
-    # Проверяем, не пройден ли уже урок на 100%
+    # Проверка завершенности урока (остается без изменений)
     progress = UserTasksProgress.objects.filter(
         user=request.user, level=level.upper(), lesson=lesson, result=100
     ).first()
-
     if progress:
         messages.warning(request, 'You have already passed this lesson 100%!!')
         return redirect('lessons', level=level)
@@ -59,31 +59,17 @@ def tasks_view(request, level, lesson):
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
-
-        existing_progress = UserTasksProgress.objects.filter(
-            user=request.user, level=level.upper(), lesson=lesson, result=100
-        ).exists()
-
-        if existing_progress:
+        if UserTasksProgress.objects.filter(user=request.user, level=level.upper(), lesson=lesson, result=100).exists():
             messages.warning(request, 'You have already completed this lesson!')
             return redirect('lessons', level=level)
+
         task_results = []
         correct_count = 0
 
         for task in tasks:
-            user_answer = None
-            is_correct = False
-
-            if task.option1 or task.option2 or task.option3:
-                correct_answer = [task.option1, task.option2, task.option3][int(task.correct_answer) - 1]
-                user_answer = request.POST.get(f'task_{task.id}')
-                is_correct = user_answer == correct_answer
-
-            elif task.audio:
-                user_answer = request.POST.get(f'audio_answer_{task.id}', '').strip()
-                normalized_user_answer = ' '.join(user_answer.split()).lower()
-                normalized_correct = ' '.join(task.correct_answer.split()).lower()
-                is_correct = normalized_user_answer == normalized_correct
+            field, strategy = get_check_strategy(task)
+            user_answer = request.POST.get(f'{field}_{task.id}', '').strip()
+            is_correct = strategy.check_answer(task, user_answer)
 
             if is_correct:
                 correct_count += 1
@@ -105,18 +91,15 @@ def tasks_view(request, level, lesson):
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
 
         if score >= 70:
-            # Проверяем, нужно ли открыть следующий уровень
             current_level = language_level.level
             level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
             if current_level in level_order:
                 index = level_order.index(current_level)
                 if index < len(level_order) - 1:
                     next_level = level_order[index + 1]
-                    # Проверяем, что следующий уровень еще не открыт
                     if not UserTasksProgress.objects.filter(user=request.user, level=next_level).exists():
                         messages.info(request, f'Congratulations! Level {next_level} is open to you!')
 
-        # Сохраняем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
             user=request.user, level=level.upper(), lesson=lesson, defaults={'result': score}
         )
