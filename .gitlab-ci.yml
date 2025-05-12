@@ -25,7 +25,11 @@ check_style:
   stage: checks
   <<: *default_rules
   script:
-    - ./scripts/linux/setup.sh
+    - PROJECT="lingvista"
+    - VENV_PATH="./venv"
+    - PYTHON_VERSION="3.11.4"
+    - uv venv --seed --prompt "${PROJECT}" -p "${PYTHON_VERSION}" "${VENV_PATH}"
+    - ./scripts/linux/install.sh
     - ./scripts/linux/check.sh
 
 django_web:
