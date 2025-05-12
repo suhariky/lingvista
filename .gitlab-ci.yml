@@ -25,7 +25,8 @@ check_style:
   stage: checks
   <<: *default_rules
   script:
-    - whoami
+    - echo $PATH
+    - ls /root/.local/bin/
     - PROJECT="lingvista"
     - VENV_PATH="./venv"
     - PYTHON_VERSION="3.11.4"
