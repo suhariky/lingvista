@@ -1,0 +1,65 @@
+stages:
+  - checks
+  - tests
+  - documents
+
+variables:
+  PYTHON_VERSION: "3.11"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - venv/
+    - .cache/
+
+.default_image: &default_image
+  image: qwerty112358/python-uv:1.0.0
+
+.default_rules: &default_rules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+check_style:
+  <<: *default_image
+  stage: checks
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/check.sh
+
+django_web:
+  <<: *default_image
+  stage: tests
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/tests.sh
+
+build_docs:
+  <<: *default_image
+  stage: documents
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/create_docs.sh
+  artifacts:
+    paths:
+      - target/
+    expire_in: 1 day
+
+pages:
+  <<: *default_image
+  stage: documents
+  dependencies:
+    - build_docs
+  script:
+    - mv target public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
