@@ -34,6 +34,7 @@ django_web:
   stage: tests
   <<: *default_rules
   script:
+    - export PATH=/root/.local/bin:$PATH
     - ./scripts/linux/setup.sh
     - ./scripts/linux/tests.sh
 
@@ -42,6 +43,7 @@ build_docs:
   stage: documents
   <<: *default_rules
   script:
+    - export PATH=/root/.local/bin:$PATH
     - ./scripts/linux/setup.sh
     - ./scripts/linux/create_docs.sh
   artifacts:

@@ -1,7 +1,8 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
-from .models import Profile, LanguageLevel
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from .models import LanguageLevel, Profile
 
 
 class ViewTests(TestCase):
@@ -25,10 +26,7 @@ class ViewTests(TestCase):
         self.assertContains(response, 'Email')
 
     def test_auth_redirects(self):
-        protected_urls = [
-            reverse('profile_view'),
-            reverse('langlevel')
-        ]
+        protected_urls = [reverse('profile_view'), reverse('langlevel')]
 
         for url in protected_urls:
             response = self.client.get(url)
