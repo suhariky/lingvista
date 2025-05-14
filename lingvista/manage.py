@@ -8,12 +8,15 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-def get_env_vars_from_example(file_path='.env.example'):
+def get_env_vars_from_example(file_path='.env.example') -> list[str]:
     """
     Извлекает имена переменных из .env.example файла
 
-    :param file_path: Путь к файлу .env.example
-    :return: Список имен переменных окружения
+    Args:
+        file_path: Путь к файлу .env.example
+
+    Returns:
+         Список имен переменных окружения
     """
     env_vars = []
     env_file = Path(file_path)
@@ -24,17 +27,18 @@ def get_env_vars_from_example(file_path='.env.example'):
     # Регулярное выражение для поиска имен переменных
     pattern = re.compile(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=')
 
-    with open(env_file, 'r') as f:
+    with open(env_file, mode='r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#'):  # Игнорируем пустые строки и комментарии
                 match = pattern.match(line)
                 if match:
                     env_vars.append(match.group(1))
+    return env_vars
 
 
 def main():
-    """Run administrative tasks."""
+    """Запуск административных задач."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lingvista.settings')
     load_dotenv()
     try:
