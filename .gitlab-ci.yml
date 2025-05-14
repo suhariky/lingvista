@@ -29,6 +29,24 @@ check_style:
     - ./scripts/linux/setup.sh
     - ./scripts/linux/check.sh
 
+pylint:
+  <<: *default_image
+  stage: checks
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/pylint.sh
+
+pycodestyle:
+  <<: *default_image
+  stage: checks
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/pycodestyle.sh
+
 django_web:
   <<: *default_image
   stage: tests
@@ -37,6 +55,15 @@ django_web:
     - export PATH=/root/.local/bin:$PATH
     - ./scripts/linux/setup.sh
     - ./scripts/linux/tests.sh
+
+coverage:
+  <<: *default_image
+  stage: tests
+  <<: *default_rules
+  script:
+    - export PATH=/root/.local/bin:$PATH
+    - ./scripts/linux/setup.sh
+    - ./scripts/linux/coverage.sh
 
 build_docs:
   <<: *default_image
