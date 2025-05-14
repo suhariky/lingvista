@@ -1,0 +1,74 @@
+[project]
+name = "lingvista"
+version = "1.0.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.11.4"
+dependencies = [
+    "black==25.1.0",
+    "coverage==7.8.0",
+    "django==5.1.6",
+    "isort==6.0.1",
+    "mkdocs==1.6.1",
+    "mkdocs-material==9.6.13",
+    "mkdocs-mermaid2-plugin==1.2.1",
+    "mkdocstrings[python]==0.29.1",
+    "pillow==11.1.0",
+    "pycodestyle==2.13.0",
+    "pylint==3.3.7",
+    "python-dotenv==1.1.0",
+    "ruff==0.11.8",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+skip-string-normalization = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.mypy_cache
+  | \.tox
+  | \.pytest_cache
+  | build
+  | dist
+  | migrations
+  | venv
+  | __pycache__
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["lingvista", "lingvista_web"]
+known_django = ["lingvista_web"]
+skip = ["migrations", "templates",  "static", "media", "venv", ".venv"]
+sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY",  "FIRSTPARTY", "LOCALFOLDER"]
+combine_as_imports = true
+include_trailing_comma = true
+use_parentheses = true
+multi_line_output = 3
+force_grid_wrap = 0
+skip_glob = ["*/__init__.py"]
+
+[tool.ruff]
+line-length = 120
+
+[lint]
+select = [
+    "E", "W", "F", "I", "B", "C", "UP", "DJ",
+]
+exclude = [
+    ".venv/",
+    "venv/",
+    "migrations/",
+    "__pycache__/",
+    "*.pyi",
+]
+
+[lint.isort]
+known-first-party = ["lingvista", "lingvista_web"]
+required-imports = ["from __future__ import annotations"]

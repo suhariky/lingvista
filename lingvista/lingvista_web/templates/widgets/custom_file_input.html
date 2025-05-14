@@ -1,0 +1,8 @@
+<div class="file-input-wrapper">
+    <label for="{{ widget.attrs.id }}" class="custom-file-label">
+        {{ widget.custom_text }}
+    </label>
+    <input type="{{ widget.type }}" name="{{ widget.name }}"
+           {% include "django/forms/widgets/attrs.html" %}>
+    <span class="file-name">{% if widget.value %}{{ widget.value }}{% endif %}</span>
+</div>

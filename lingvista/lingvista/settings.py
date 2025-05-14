@@ -66,9 +66,7 @@ ROOT_URLCONF = 'lingvista.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            'lingvista_app/templates'
-        ],
+        'DIRS': ['lingvista_app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,7 +133,7 @@ STATICFILES_DIRS = [
     (BASE_DIR / 'lingvista_web' / 'static').as_posix(),
 ]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -144,8 +142,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'  # Имя URL для страницы входа
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-if not DEBUG:
-    from django.conf.urls.static import static
-    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+# Настройки email =\
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.getenv('YANDEX_EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('YANDEX_APP_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('YANDEX_EMAIL_USER')

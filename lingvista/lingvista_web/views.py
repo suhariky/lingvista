@@ -1,42 +1,95 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from typing import Any, Dict, List, Literal, TypedDict, Union
+
 from django.contrib import messages
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm, ProfileEditForm, UserLogInForm
-from .models import Profile, LanguageLevel, Lesson, Task, UserTasksProgress
-from django.views.decorators.http import require_POST
+from django.contrib.auth.models import User
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import QuerySet
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+
+from .check_answer import get_check_strategy
+from .forms import (
+    CustomPasswordChangeForm,
+    EmailChangeForm,
+    ProfileEditForm,
+    UserLogInForm,
+    UserRegistrationForm,
+)
+from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
+
+# Тип для уровней языка (A1, A2, B1, B2, C1, C2)
+LanguageLevelType = Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
 
-# @require_POST
-# def custom_logout(request):
-#     logout(request)
-#     return redirect('main_page')
+class TaskResult(TypedDict):
+    """Типизированный словарь для хранения результатов выполнения задания."""
+
+    user_answer: str
+    is_correct: bool
+    id: int
+    question: str
+    correct_answer: str
+    option1: str
+    option2: str
+    option3: str
+    audio: str
 
 
+class LessonData(TypedDict):
+    """Типизированный словарь для хранения данных об уроке."""
 
-def main_page(request):
+    lesson: Lesson
+    is_completed: bool
+    score: int
+
+
+class LevelData(TypedDict):
+    """Типизированный словарь для хранения данных об уровне языка."""
+
+    level: LanguageLevel
+    is_unlocked: bool
+    is_completed: bool
+
+
+def main_page(request: WSGIRequest) -> HttpResponse:
+    """Отображение главной страницы."""
     return render(request, 'html/pages/main_page.html')
 
 
-def policy_view(request):
+def policy_view(request: WSGIRequest) -> HttpResponse:
+    """Отображение страницы с политикой конфиденциальности."""
     return render(request, 'html/pages/policy_page.html')
 
 
-def login_view(request):
+def login_view(request: WSGIRequest) -> Union[HttpResponse, HttpResponseRedirect]:
+    """
+    Обработка входа пользователя.
+
+    Если метод POST - аутентифицирует пользователя.
+    Если метод GET - отображает форму входа.
+    """
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
             return redirect('main_page')
-        else:
-            messages.error(request, 'Invalid username or password')
+        messages.error(request, 'Invalid username or password')
+
     form = UserLogInForm(request.POST if request.method == 'POST' else None)
     return render(request, 'html/pages/login_page.html', {'form': form})
 
 
-def register_view(request):
+def register_view(request: WSGIRequest) -> Union[HttpResponse, HttpResponseRedirect]:
+    """
+    Обработка регистрации нового пользователя.
+
+    Если метод POST и форма валидна - создает нового пользователя.
+    Если метод GET - отображает форму регистрации.
+    """
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -47,103 +100,93 @@ def register_view(request):
             return redirect('main_page')
     else:
         form = UserRegistrationForm()
+
     return render(request, 'html/pages/registry_page.html', {'form': form})
 
 
 @login_required
-def tasks_view(request, level, lesson):
-    # Проверяем, не пройден ли уже урок на 100%
+def tasks_view(
+    request: WSGIRequest, level: LanguageLevelType, lesson: int
+) -> Union[HttpResponse, HttpResponseRedirect]:
+    """
+    Отображение и обработка заданий урока.
+
+    Args:
+        request: Запрос WSGI
+        level: Уровень языка (A1, A2 и т.д.)
+        lesson: Номер урока
+
+    Returns:
+        Если пользователь уже прошел урок на 100% - редирект на страницу уроков
+        Если метод POST - проверяет ответы и сохраняет прогресс
+        Если метод GET - отображает задания урока
+    """
+    # Проверяем, есть ли у пользователя прогресс по этому уроку с результатом 100%
     progress = UserTasksProgress.objects.filter(
-        user=request.user,
-        level=level.upper(),
-        lesson=lesson,
-        result=100
+        user=request.user, level=level.upper(), lesson=lesson, result=100
     ).first()
 
     if progress:
         messages.warning(request, 'You have already passed this lesson 100%!!')
         return redirect('lessons', level=level)
 
+    # Получаем объекты уровня языка и урока
     language_level = get_object_or_404(LanguageLevel, level=level.upper())
     lesson_obj = get_object_or_404(Lesson, language_level=language_level, lesson_number=lesson)
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
-
-        existing_progress = UserTasksProgress.objects.filter(
-            user=request.user,
-            level=level.upper(),
-            lesson=lesson,
-            result=100
-        ).exists()
-
-        if existing_progress:
+        # Дополнительная проверка на случай, если пользователь обойдет предупреждение
+        if UserTasksProgress.objects.filter(user=request.user, level=level.upper(), lesson=lesson, result=100).exists():
             messages.warning(request, 'You have already completed this lesson!')
             return redirect('lessons', level=level)
-        task_results = []
+
+        task_results: List[TaskResult] = []
         correct_count = 0
 
+        # Проверяем ответы для каждого задания
         for task in tasks:
-            user_answer = None
-            is_correct = False
-            correct_answer_display = task.correct_answer
-
-            if task.option1 or task.option2 or task.option3:
-                correct_answer = [
-                    task.option1,
-                    task.option2,
-                    task.option3
-                ][int(task.correct_answer) - 1]
-                user_answer = request.POST.get(f'task_{task.id}')
-                is_correct = user_answer == correct_answer
-
-            elif task.audio:
-                user_answer = request.POST.get(f'audio_answer_{task.id}', '').strip()
-                normalized_user_answer = ' '.join(user_answer.split()).lower()
-                normalized_correct = ' '.join(task.correct_answer.split()).lower()
-                is_correct = normalized_user_answer == normalized_correct
+            field, strategy = get_check_strategy(task)
+            user_answer = request.POST.get(f'{field}_{task.id}', '').strip()
+            is_correct = strategy.check_answer(task, user_answer)
 
             if is_correct:
                 correct_count += 1
 
-            task_results.append({
-                'user_answer': user_answer,
-                'is_correct': is_correct,
-                "id": task.id,
-                'question': task.question,
-                'correct_answer': task.correct_answer,
-                'option1': task.option1,
-                'option2': task.option2,
-                'option3': task.option3,
-                'audio': task.audio,
-            })
+            task_results.append(
+                {
+                    'user_answer': user_answer,
+                    'is_correct': is_correct,
+                    "id": task.id,
+                    'question': task.question,
+                    'correct_answer': task.correct_answer,
+                    'option1': task.option1,
+                    'option2': task.option2,
+                    'option3': task.option3,
+                    'audio': task.audio,
+                }
+            )
 
+        # Рассчитываем процент правильных ответов
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
 
+        # Если результат >= 70%, проверяем, нужно ли открыть следующий уровень
         if score >= 70:
-            # Проверяем, нужно ли открыть следующий уровень
             current_level = language_level.level
-            level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+            level_order: List[LanguageLevelType] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
             if current_level in level_order:
                 index = level_order.index(current_level)
                 if index < len(level_order) - 1:
                     next_level = level_order[index + 1]
-                    # Проверяем, что следующий уровень еще не открыт
-                    if not UserTasksProgress.objects.filter(
-                            user=request.user,
-                            level=next_level
-                    ).exists():
+                    if not UserTasksProgress.objects.filter(user=request.user, level=next_level).exists():
                         messages.info(request, f'Congratulations! Level {next_level} is open to you!')
 
-        # Сохраняем прогресс пользователя
+        # Сохраняем или обновляем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
-            user=request.user,
-            level=level.upper(),
-            lesson=lesson,
-            defaults={'result': score}
+            user=request.user, level=level.upper(), lesson=lesson, defaults={'result': score}
         )
 
-        context = {
+        context: Dict[str, Any] = {
             'level': level,
             'lesson': lesson,
             'tasks': task_results,
@@ -154,86 +197,91 @@ def tasks_view(request, level, lesson):
         }
         return render(request, 'html/pages/tasks_page.html', context)
 
-    context = {
-        'level': level,
-        'lesson': lesson,
-        'tasks': tasks,
-        'show_answers': False,
-        'lesson_obj': lesson_obj
-    }
+    context = {'level': level, 'lesson': lesson, 'tasks': tasks, 'show_answers': False, 'lesson_obj': lesson_obj}
     return render(request, 'html/pages/tasks_page.html', context)
 
 
 @login_required
-def profile_view(request):
+def profile_view(request: WSGIRequest) -> HttpResponse:
+    """Отображение профиля пользователя с его прогрессом."""
     unlocked_levels = request.user.profile.get_unlocked_levels()
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     task_progress = UserTasksProgress.objects.filter(user=request.user)
-    return render(request, 'html/pages/account_page.html', {
-        'user': request.user,
-        'profile': profile,
-        'task_progress': task_progress,
-        'language_level': unlocked_levels[-1]
-    })
+
+    return render(
+        request,
+        'html/pages/account_page.html',
+        {
+            'user': request.user,
+            'profile': profile,
+            'task_progress': task_progress,
+            'language_level': unlocked_levels[-1] if unlocked_levels else None,
+        },
+    )
 
 
 @login_required
-def langlevel_view(request):
+def langlevel_view(request: WSGIRequest) -> HttpResponse:
+    """Отображение списка уровней языка с информацией о доступности."""
     unlocked_levels = request.user.profile.get_unlocked_levels()
     all_levels = LanguageLevel.objects.all().order_by('level')
 
-    levels_data = []
+    levels_data: List[LevelData] = []
     for level in all_levels:
-        levels_data.append({
-            'level': level,
-            'is_unlocked': level.level in unlocked_levels,
-            'is_completed': check_level_completion(request.user, level.level)
-        })
-    return render(request, 'html/pages/langlevel_page.html', {
-        'levels_data': levels_data
-    })
+        levels_data.append(
+            {
+                'level': level,
+                'is_unlocked': level.level in unlocked_levels,
+                'is_completed': check_level_completion(request.user, level.level),
+            }
+        )
+
+    return render(request, 'html/pages/langlevel_page.html', {'levels_data': levels_data})
 
 
-def check_level_completion(user, level):
+def check_level_completion(user: User, level: str) -> bool:
+    """
+    Проверяет, полностью ли завершен уровень пользователем.
+
+    Args:
+        user: Пользователь
+        level: Уровень языка для проверки
+
+    Returns:
+        True если все уроки уровня завершены на 100%, иначе False
+    """
     lessons = Lesson.objects.filter(language_level__level=level)
     for lesson in lessons:
-        progress = UserTasksProgress.objects.filter(
-            user=user,
-            level=level,
-            lesson=lesson.lesson_number
-        ).first()
+        progress = UserTasksProgress.objects.filter(user=user, level=level, lesson=lesson.lesson_number).first()
         if not progress or progress.result < 100:
             return False
     return True
 
 
-# @login_required
-# def accountedit_view(request):
-#     return render(request, 'html/pages/accountedit_page.html')
-
-
 @login_required
-def lessons_view(request, level):
-    # Получаем все уроки для данного уровня
-    lessons = Lesson.objects.filter(language_level__level=level.upper()).order_by('lesson_number')
+def lessons_view(request: WSGIRequest, level: str) -> HttpResponse:
+    """
+    Отображение списка уроков для указанного уровня.
 
-    # Получаем прогресс пользователя по этим урокам
-    user_progress = UserTasksProgress.objects.filter(
-        user=request.user,
-        level=level.upper()
-    )
+    Args:
+        request: Запрос WSGI
+        level: Уровень языка
 
-    # Создаем список уроков с информацией о доступности
-    lessons_data = []
+    Returns:
+        Страница с списком уроков и информацией о прогрессе
+    """
+    lessons: QuerySet[Lesson] = Lesson.objects.filter(language_level__level=level.upper()).order_by('lesson_number')
+
+    user_progress = UserTasksProgress.objects.filter(user=request.user, level=level.upper())
+
+    lessons_data: List[LessonData] = []
     for lesson in lessons:
         progress = user_progress.filter(lesson=lesson.lesson_number).first()
         is_completed = progress and progress.result == 100
 
-        lessons_data.append({
-            'lesson': lesson,
-            'is_completed': is_completed,
-            'score': progress.result if progress else 0
-        })
+        lessons_data.append(
+            {'lesson': lesson, 'is_completed': is_completed, 'score': progress.result if progress else 0}
+        )
 
     context = {
         'level': level.upper(),
@@ -242,28 +290,55 @@ def lessons_view(request, level):
     return render(request, 'html/pages/lessons_page.html', context)
 
 
-# @login_required
-# def profile(request):
-#     profile, created = Profile.objects.get_or_create(user=request.user)
-#     task_progress = UserTasksProgress.objects.filter(user=request.user)
-#     return render(request, 'html/pages/account_page.html', {
-#         'user': request.user,
-#         'profile': profile,
-#         'task_progress': task_progress,
-#     })
-
-
 @login_required
-def edit_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+def edit_profile(request: WSGIRequest) -> Union[HttpResponse, HttpResponseRedirect]:
+    """
+    Редактирование профиля пользователя.
+
+    Обрабатывает три формы:
+    - Изменение аватара профиля
+    - Изменение email
+    - Изменение пароля
+
+    Returns:
+        Если форма отправлена и валидна - редирект на страницу редактирования
+        Иначе - отображение формы редактирования
+    """
+    profile = request.user.profile
 
     if request.method == 'POST':
-        form = ProfileEditForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The profile has been successfully updated!')
-            return redirect('profile_view')
-    else:
-        form = ProfileEditForm(instance=profile)
+        profile_form = ProfileEditForm(request.POST, request.FILES, instance=profile)
+        email_form = EmailChangeForm(request.POST)
+        password_form = CustomPasswordChangeForm(request.user, request.POST)
 
-    return render(request, 'html/pages/accountedit_page.html', {'form': form})
+        if 'profile_submit' in request.POST and profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Your profile picture has been updated!')
+            return redirect('edit_profile')
+
+        if 'email_submit' in request.POST and email_form.is_valid():
+            new_email = email_form.cleaned_data['email']
+            request.user.email = new_email
+            request.user.save()
+            messages.success(request, 'Your email has been updated!')
+            return redirect('edit_profile')
+
+        if 'password_submit' in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password has been updated!')
+            return redirect('edit_profile')
+    else:
+        profile_form = ProfileEditForm(instance=profile)
+        email_form = EmailChangeForm(initial={'email': request.user.email})
+        password_form = CustomPasswordChangeForm(request.user)
+
+    return render(
+        request,
+        'html/pages/accountedit_page.html',
+        {
+            'profile_form': profile_form,
+            'email_form': email_form,
+            'password_form': password_form,
+        },
+    )

@@ -46,6 +46,7 @@ header > nav {
     vertical-align: middle;
     width: 44px;
     height: 44px;
+    object-fit: cover;
 }
 
 /* Стили для кнопки выхода */
@@ -63,4 +64,10 @@ header > nav {
 
 .logout-btn:hover {
     background-color: #c46d6db7;
+}
+
+.logo-navbar {
+    height: 50px;
+    width: auto;
+    vertical-align: middle;
 }
