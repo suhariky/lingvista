@@ -15,7 +15,7 @@
                 <a href="{% url 'lessons' level=level_data.level.level|lower %}">
                     {{ level_data.level.level }} - {{ level_data.level.description }}
                     {% if level_data.is_completed %}✓{% endif %}
-                    {% if user.is_superuser %}🔑{% endif %}  <!-- Иконка для админа -->
+                    {% if user.is_superuser %}🔑{% endif %}
                 </a>
             {% else %}
                 <span>{{ level_data.level.level }} - {{ level_data.level.description }}</span>

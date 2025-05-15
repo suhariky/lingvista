@@ -19,7 +19,6 @@ from .forms import (
 )
 from .models import LanguageLevel, Lesson, Profile, Task, UserTasksProgress
 
-# Тип для уровней языка (A1, A2, B1, B2, C1, C2)
 LanguageLevelType = Literal['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
 
@@ -121,7 +120,7 @@ def tasks_view(
         Если метод POST - проверяет ответы и сохраняет прогресс
         Если метод GET - отображает задания урока
     """
-    # Проверяем, есть ли у пользователя прогресс по этому уроку с результатом 100%
+
     progress = UserTasksProgress.objects.filter(
         user=request.user, level=level.upper(), lesson=lesson, result=100
     ).first()
@@ -130,13 +129,12 @@ def tasks_view(
         messages.warning(request, 'You have already passed this lesson 100%!!')
         return redirect('lessons', level=level)
 
-    # Получаем объекты уровня языка и урока
     language_level = get_object_or_404(LanguageLevel, level=level.upper())
     lesson_obj = get_object_or_404(Lesson, language_level=language_level, lesson_number=lesson)
     tasks = list(Task.objects.filter(lesson=lesson_obj).order_by('id'))
 
     if request.method == 'POST':
-        # Дополнительная проверка на случай, если пользователь обойдет предупреждение
+
         if UserTasksProgress.objects.filter(user=request.user, level=level.upper(), lesson=lesson, result=100).exists():
             messages.warning(request, 'You have already completed this lesson!')
             return redirect('lessons', level=level)
@@ -144,7 +142,6 @@ def tasks_view(
         task_results: List[TaskResult] = []
         correct_count = 0
 
-        # Проверяем ответы для каждого задания
         for task in tasks:
             field, strategy = get_check_strategy(task)
             user_answer = request.POST.get(f'{field}_{task.id}', '').strip()
@@ -167,10 +164,8 @@ def tasks_view(
                 }
             )
 
-        # Рассчитываем процент правильных ответов
         score = int((correct_count / len(tasks)) * 100) if tasks else 0
 
-        # Если результат >= 70%, проверяем, нужно ли открыть следующий уровень
         if score >= 70:
             current_level = language_level.level
             level_order: List[LanguageLevelType] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
@@ -181,7 +176,6 @@ def tasks_view(
                     if not UserTasksProgress.objects.filter(user=request.user, level=next_level).exists():
                         messages.info(request, f'Congratulations! Level {next_level} is open to you!')
 
-        # Сохраняем или обновляем прогресс пользователя
         UserTasksProgress.objects.update_or_create(
             user=request.user, level=level.upper(), lesson=lesson, defaults={'result': score}
         )

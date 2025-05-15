@@ -52,14 +52,13 @@ class Profile(models.Model):
         Returns:
             list: Список доступных уровней (например, ['A1', 'A2']).
         """
-        levels = ['A1']  # A1 всегда доступен
+        levels = ['A1']
         level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
         for i in range(len(level_order) - 1):
             current_level = level_order[i]
             next_level = level_order[i + 1]
 
-            # Проверяем, пройдены ли все уроки текущего уровня на 70%
             lessons = Lesson.objects.filter(language_level__level=current_level)
             completed = True
 

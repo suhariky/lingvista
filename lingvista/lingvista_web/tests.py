@@ -186,10 +186,9 @@ class AuthenticatedViewTests(TestCase):
         self.assertEqual(str(messages[0]), 'Your password has been updated!')
 
     def test_check_level_completion(self):
-        # Initially should be False
+
         self.assertFalse(check_level_completion(self.user, 'A1'))
 
-        # Create completed progress
         UserTasksProgress.objects.create(user=self.user, level='A1', lesson=1, result=100)
         self.assertTrue(check_level_completion(self.user, 'A1'))
 
@@ -357,7 +356,7 @@ class UserTasksProgressModelTest(TestCase):
         self.assertEqual(str(self.progress), expected_str)
 
     def test_unique_together_constraint(self):
-        # Should not be able to create duplicate progress record
+
         with self.assertRaises(Exception):
             UserTasksProgress.objects.create(user=self.user, level="C1", lesson=5, result=90)
 
