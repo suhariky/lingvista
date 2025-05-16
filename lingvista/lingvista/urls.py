@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -5,6 +7,9 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from lingvista_web import views
+
+logger = logging.getLogger(__name__)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,3 +44,7 @@ urlpatterns = [
     path('<str:level>_lessons_page/', views.lessons_view, name='lessons'),
     path('policy/', views.policy_view, name='private_policy'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+logger.debug("Registered URL patterns:")
+for url_pattern in urlpatterns:
+    logger.debug(f"- {url_pattern.pattern} -> {getattr(url_pattern, 'name', 'unnamed')}")

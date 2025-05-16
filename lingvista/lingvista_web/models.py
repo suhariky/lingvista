@@ -1,5 +1,9 @@
+import logging
+
 from django.contrib.auth.models import User
 from django.db import models
+
+logger = logging.getLogger(__name__)
 
 
 class Audio(models.Model):
@@ -20,6 +24,18 @@ class Audio(models.Model):
 
     def __str__(self):
         return str(self.title) or "Audio"
+
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(f"Created new Audio: {self.title or 'Untitled'}")
+            else:
+                logger.debug(f"Updated Audio: {self.title or 'Untitled'}")
+        except Exception as e:
+            logger.error(f"Error saving Audio: {str(e)}", exc_info=True)
+            raise
 
 
 class Profile(models.Model):
@@ -45,6 +61,18 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(f"Created new Profile for user: {self.user.username}")
+            else:
+                logger.debug(f"Updated Profile for user: {self.user.username}")
+        except Exception as e:
+            logger.error(f"Error saving Profile for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
+
     def get_unlocked_levels(self):
         """
         Возвращает список доступных пользователю уровней на основе прогресса.
@@ -52,44 +80,66 @@ class Profile(models.Model):
         Returns:
             list: Список доступных уровней (например, ['A1', 'A2']).
         """
-        levels = ['A1']
-        level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+        logger.debug(f"Getting unlocked levels for user: {self.user.username}")
+        try:
+            levels = ['A1']
+            level_order = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
-        for i in range(len(level_order) - 1):
-            current_level = level_order[i]
-            next_level = level_order[i + 1]
+            for i in range(len(level_order) - 1):
+                current_level = level_order[i]
+                next_level = level_order[i + 1]
 
-            lessons = Lesson.objects.filter(language_level__level=current_level)
-            completed = True
+                lessons = Lesson.objects.filter(language_level__level=current_level)
+                completed = True
 
-            for lesson in lessons:
-                progress = UserTasksProgress.objects.filter(
-                    user=self.user, level=current_level, lesson=lesson.lesson_number
-                ).first()
+                for lesson in lessons:
+                    progress = UserTasksProgress.objects.filter(
+                        user=self.user, level=current_level, lesson=lesson.lesson_number
+                    ).first()
 
-                if not progress or progress.result < 70:
-                    completed = False
-                    break
+                    if not progress or progress.result < 70:
+                        completed = False
+                        break
 
-            if completed and next_level not in levels:
-                levels.append(next_level)
+                if completed and next_level not in levels:
+                    logger.info(f"User {self.user.username} unlocked new level: {next_level}")
+                    levels.append(next_level)
 
-        return levels
+            logger.debug(f"Unlocked levels for user {self.user.username}: {levels}")
+            return levels
+        except Exception as e:
+            logger.error(f"Error in get_unlocked_levels for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
 
     def increment_streak(self):
         """Увеличивает счетчик дней активности пользователя на 1."""
-        self.streak += 1
-        self.save()
+        try:
+            self.streak += 1
+            self.save()
+            logger.info(f"User {self.user.username} streak increased to {self.streak}")
+        except Exception as e:
+            logger.error(f"Error incrementing streak for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
 
     def reset_streak(self):
         """Сбрасывает счетчик дней активности пользователя в 0."""
-        self.streak = 0
-        self.save()
+        try:
+            logger.info(f"User {self.user.username} streak reset from {self.streak} to 0")
+            self.streak = 0
+            self.save()
+        except Exception as e:
+            logger.error(f"Error resetting streak for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
 
     def complete_level(self):
         """Увеличивает счетчик пройденных уровней на 1."""
-        self.completed_levels += 1
-        self.save()
+        try:
+            logger.info(f"User {self.user.username} completed level, total now: {self.completed_levels + 1}")
+            self.completed_levels += 1
+            self.save()
+        except Exception as e:
+            logger.error(f"Error completing level for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
 
     def add_achievement(self, achievement):
         """
@@ -98,11 +148,16 @@ class Profile(models.Model):
         Args:
             achievement (str): Текст достижения для добавления.
         """
-        if self.achievements:
-            self.achievements += f", {achievement}"
-        else:
-            self.achievements = achievement
-        self.save()
+        try:
+            logger.info(f"Adding achievement to user {self.user.username}: {achievement}")
+            if self.achievements:
+                self.achievements += f", {achievement}"
+            else:
+                self.achievements = achievement
+            self.save()
+        except Exception as e:
+            logger.error(f"Error adding achievement for user {self.user.username}: {str(e)}", exc_info=True)
+            raise
 
 
 class LanguageLevel(models.Model):
@@ -129,6 +184,18 @@ class LanguageLevel(models.Model):
     def __str__(self):
         return str(self.level)
 
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(f"Created new LanguageLevel: {self.level}")
+            else:
+                logger.debug(f"Updated LanguageLevel: {self.level}")
+        except Exception as e:
+            logger.error(f"Error saving LanguageLevel {self.level}: {str(e)}", exc_info=True)
+            raise
+
 
 class Lesson(models.Model):
     """
@@ -148,6 +215,18 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.language_level.level} - Lesson {self.lesson_number}: {self.title}"
+
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(f"Created new Lesson: {self.title} for level {self.language_level.level}")
+            else:
+                logger.debug(f"Updated Lesson: {self.title} for level {self.language_level.level}")
+        except Exception as e:
+            logger.error(f"Error saving Lesson {self.title}: {str(e)}", exc_info=True)
+            raise
 
 
 class Task(models.Model):
@@ -173,6 +252,18 @@ class Task(models.Model):
     def __str__(self):
         return f"Task for {self.lesson.title}"
 
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(f"Created new Task for lesson {self.lesson.title}")
+            else:
+                logger.debug(f"Updated Task for lesson {self.lesson.title}")
+        except Exception as e:
+            logger.error(f"Error saving Task for lesson {self.lesson.title}: {str(e)}", exc_info=True)
+            raise
+
 
 class UserTasksProgress(models.Model):
     """
@@ -197,3 +288,27 @@ class UserTasksProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - Level {self.level} - Lesson {self.lesson} - Result {self.result}%"
+
+    def save(self, *args, **kwargs):
+        try:
+            created = not self.pk
+            super().save(*args, **kwargs)
+            if created:
+                logger.info(
+                    f"New progress record: "
+                    f"{self.user.username} - Level {self.level} - Lesson {self.lesson} - {self.result}%"
+                )
+            else:
+                logger.debug(
+                    f"Updated progress: "
+                    f"{self.user.username} - Level {self.level} - Lesson {self.lesson} - {self.result}%"
+                )
+
+            if self.result >= 70:
+                logger.info(
+                    f"User {self.user.username} successfully completed lesson {self.lesson} "
+                    f"at level {self.level} with score {self.result}%"
+                )
+        except Exception as e:
+            logger.error(f"Error saving UserTasksProgress for {self.user.username}: {str(e)}", exc_info=True)
+            raise

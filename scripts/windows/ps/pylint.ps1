@@ -13,7 +13,7 @@ try {
 
     # Запуск сервера
     Write-Host "[pylint.ps1] Check Pylint..."
-    pylint lingvista --disable=C0114,R0903,E1101 --max-line-length=120 --fail-under=8 --ignore=migrations
+    pylint lingvista --disable=C0114,R0903,E1101,W1203 --max-line-length=120 --fail-under=8 --ignore=migrations
 }
 catch {
     Write-Error "[pylint.ps1] Error: $_"

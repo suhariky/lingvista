@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -7,6 +9,8 @@ from django.urls import reverse
 from .forms import CustomPasswordChangeForm, EmailChangeForm, ProfileEditForm, UserLogInForm, UserRegistrationForm
 from .models import Audio, LanguageLevel, Lesson, Profile, Task, UserTasksProgress
 from .views import check_level_completion
+
+logging.disable(logging.CRITICAL)
 
 User = get_user_model()
 
