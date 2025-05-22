@@ -57,12 +57,18 @@
 
 .tasks-button {
     color: white;
-    background-color: rgba(109, 158, 163, 1);
+    background-color: #6D9EA3;
+    transition: background-color 0.2s;
+    cursor: pointer;
     padding: 5px 9px;
     border-radius: 15px;
     margin-top: 15px;
     margin-bottom: 15px;
     margin-left: 20px;
+}
+
+.tasks-button:hover {
+    background-color: #6d9ea3b7;
 }
 
 body {
