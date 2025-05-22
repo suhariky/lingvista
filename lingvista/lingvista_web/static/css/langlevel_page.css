@@ -19,6 +19,7 @@
 
 .locked-level:hover {
     background-color: #6D9EA3;
+    cursor: default;
 }
 
 .link-section > a, span {
