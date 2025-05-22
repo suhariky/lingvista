@@ -9,6 +9,15 @@
     width: 760px;
     height: 50px;
     background-color: #6D9EA3;
+    transition: background-color 0.2s;
+}
+
+.link-section:hover {
+    background-color: #6d9ea3b7;
+}
+
+.locked-level:hover {
+    background-color: #6D9EA3;
 }
 
 .link-section > a, span {
