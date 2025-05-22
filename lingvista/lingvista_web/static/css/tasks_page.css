@@ -1,7 +1,6 @@
 .task-question > h3 {
     margin: 0;
     padding-top: 15px;
-    font-size: x-large;
 }
 
 .task-question > p{
@@ -20,16 +19,6 @@
 .audio-answer-input > input{
     margin-left: 10px;
 }
-
-.submit-section > button{
-    margin: 15px 10px;
-    padding: 5px 9px;
-    color: white;
-    background-color: rgba(109, 158, 163, 1);
-    border-radius: 15px;
-}
-
-
 
 .results-summary{
     padding: 0 10px;
@@ -55,7 +44,7 @@
 }
 
 .container {
-    margin-top: 30px;
+    padding-top: 30px;
     min-height: 100vh;
 }
 .submit-section{
@@ -68,7 +57,9 @@
 
 .tasks-button {
     color: white;
-    background-color: rgba(109, 158, 163, 1);
+    background-color: #6D9EA3;
+    transition: background-color 0.2s;
+    cursor: pointer;
     padding: 5px 9px;
     border-radius: 15px;
     margin-top: 15px;
@@ -76,12 +67,11 @@
     margin-left: 20px;
 }
 
-body {
-    background-color: #ECECEC;
-    margin: 0;
-    padding: 0;
+.tasks-button:hover {
+    background-color: #6d9ea3b7;
 }
 
-main {
-        background-color: transparent;
+body {
+    margin: 0;
+    padding: 0;
 }
