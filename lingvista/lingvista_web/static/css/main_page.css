@@ -177,8 +177,8 @@ h3 {
     height: auto;
 }
 
-.start-button:hover {
-    background-color: #3e7777;
+.start-button1:hover,  .start-button2:hover{
+    background-color: #6d9ea3b7;
 }
 
 .info-content ul {
@@ -210,25 +210,25 @@ h3 {
     display: inline-flex;
     align-items: center;
     height: auto;
-    background-color: #5C9A9A;
+    background-color: #6D9EA3;
     color: #fff;
     padding: 12px 25px;
     border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: background 0.2s;
 }
 .start-button1 {
     display: inline-flex;
     align-items: center;
     height: auto;
-    background-color: #5C9A9A;
+    background-color: #6D9EA3;
     color: #fff;
     padding: 12px 25px;
     border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: background 0.2s;
     margin-top: 20px; /* Добавьте этот отступ */
     display: inline-block;
 }
