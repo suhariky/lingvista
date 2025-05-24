@@ -19,7 +19,18 @@
 
 .lesson-button{
     color: white;
-    background-color: rgba(109, 158, 163, 1);
+    background-color: #6D9EA3;
+    transition: background-color 0.2s;
     padding: 5px 9px;
     border-radius: 15px;
+}
+
+.lesson-button:hover {
+    background-color: #6d9ea3b7;
+    cursor: pointer;
+}
+
+.lesson-button[disabled=""]:hover {
+    background-color: #6D9EA3;
+    cursor: default;
 }

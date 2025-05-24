@@ -6,7 +6,7 @@
     display: inline-block;
     margin: 10px 0;
     padding: 10px 20px;
-    background-color: #A2C1C3;
+    background-color: #6D9EA3;
     transition: background-color 0.2s;
     cursor: pointer;
     color: #F6F6F6;
@@ -17,7 +17,7 @@
 }
 
 .button-container a:hover {
-    background-color: #afd0d3;
+    background-color: #6d9ea3b7;
 }
 
 .profile-container-centered {
